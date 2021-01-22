@@ -258,6 +258,11 @@ namespace Uno.UI
 			/// Enables reuse of <see cref="Page"/> instances. Enabling can improve performance when using <see cref="Frame"/> navigation.
 			/// </summary>
 			public static bool IsPoolingEnabled { get; set; } = false;
+
+			/// <summary>
+			/// Defines the instance of <see cref="Page"/> should be preserved between navigation.
+			/// </summary>
+			public static bool PreserveInstance { get; set; } = true;
 		}
 
 		public static class PointerRoutedEventArgs
@@ -435,7 +440,7 @@ namespace Uno.UI
 
 			/// <summary>
 			/// [WebAssembly Only] Enables the assignation of properties from the XAML visual tree as DOM attributes: Height -> "xamlheight",
-			/// HorizontalAlignment -> "xamlhorizontalalignment" etc. 
+			/// HorizontalAlignment -> "xamlhorizontalalignment" etc.
 			/// </summary>
 			/// <remarks>
 			/// This should only be enabled for debug builds, but can greatly aid layout debugging.
@@ -448,7 +453,7 @@ namespace Uno.UI
 #if __ANDROID__
 			/// <summary>
 			/// When this is set, non-UIElements will always be clipped to their bounds (<see cref="Android.Views.ViewGroup.ClipChildren"/> will
-			/// always be set to true on their parent). 
+			/// always be set to true on their parent).
 			/// </summary>
 			/// <remarks>
 			/// This is true by default as most native views assume that they will be clipped, and can display incorrectly otherwise.

@@ -31,7 +31,7 @@ namespace Windows.ApplicationModel.Resources.Core
 			}
 		}
 		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
+		#if false || false || false || false || false || false || false
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
 		public ResourceContext() 
 		{
@@ -40,7 +40,7 @@ namespace Windows.ApplicationModel.Resources.Core
 		#endif
 		// Forced skipping of method Windows.ApplicationModel.Resources.Core.ResourceContext.ResourceContext()
 		// Forced skipping of method Windows.ApplicationModel.Resources.Core.ResourceContext.QualifierValues.get
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
+		#if false || false || false || false || false || false || false
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
 		public  void Reset()
 		{
@@ -84,7 +84,7 @@ namespace Windows.ApplicationModel.Resources.Core
 			global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Windows.ApplicationModel.Resources.Core.ResourceContext", "void ResourceContext.SetGlobalQualifierValue(string key, string value, ResourceQualifierPersistence persistence)");
 		}
 		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
+		#if false || false || false || false || false || false || false
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
 		public static global::Windows.ApplicationModel.Resources.Core.ResourceContext GetForCurrentView()
 		{
@@ -112,7 +112,7 @@ namespace Windows.ApplicationModel.Resources.Core
 			global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Windows.ApplicationModel.Resources.Core.ResourceContext", "void ResourceContext.ResetGlobalQualifierValues(IEnumerable<string> qualifierNames)");
 		}
 		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
+		#if false || false || false || false || false || false || false
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
 		public static global::Windows.ApplicationModel.Resources.Core.ResourceContext GetForViewIndependentUse()
 		{

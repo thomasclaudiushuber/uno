@@ -358,7 +358,14 @@ namespace Windows.UI.Xaml.Controls
 				previousEntry?.Instance.OnNavigatedFrom(navigationEvent);
 				CurrentEntry.Instance.OnNavigatedTo(navigationEvent);
 
-				Navigated?.Invoke(this, navigationEvent);				
+				// release the page instance, to allow it to be re-initializable with the new resource context
+				if (!FeatureConfiguration.Page.PreserveInstance && previousEntry?.Instance != null)
+				{
+					previousEntry.Instance.Frame = null;
+					previousEntry.Instance = null;
+				}
+
+				Navigated?.Invoke(this, navigationEvent);
 
 				VisualTreeHelper.CloseAllPopups();
 
@@ -388,7 +395,10 @@ namespace Windows.UI.Xaml.Controls
 		{
 			foreach (var entry in pageStackEntries)
 			{
-				entry.Instance.Frame = null;
+				if (entry.Instance != null)
+				{
+					entry.Instance.Frame = null;
+				}
 			}
 
 			if (!FeatureConfiguration.Page.IsPoolingEnabled)
