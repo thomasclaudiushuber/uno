@@ -175,12 +175,27 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="UI\Xaml\Media\Imaging\RenderTargetBitmap.Android.cs" />
+	  <None Remove="UI\Xaml\Media\Imaging\RenderTargetBitmap.iOSmacOS.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="UI\Xaml\Media\Imaging\RenderTargetBitmap.Android.cs" />
+	  <UpToDateCheckInput Remove="UI\Xaml\Media\Imaging\RenderTargetBitmap.cs" />
+	  <UpToDateCheckInput Remove="UI\Xaml\Media\Imaging\RenderTargetBitmap.iOSmacOS.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Include="Mixins\Android\BaseActivity.Callbacks.g.cs" />
 	  <Compile Include="Mixins\Android\FrameworkElementMixins.g.cs" />
 	  <Compile Include="Mixins\Android\FrameworkElementMixins.g.cs" />
 	  <Compile Include="Mixins\Android\VisualStatesMixins.g.cs" />
 	  <Compile Include="Mixins\DependencyPropertyMixins.g.cs" />
 	  <Compile Include="Mixins\DependencyPropertyMixins.g.cs" />
+	  <Compile Include="UI\Xaml\Media\Imaging\RenderTargetBitmap.iOSmacOS.cs">
+	    <SubType>Code</SubType>
+	    <Generator>MSBuild:Compile</Generator>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
