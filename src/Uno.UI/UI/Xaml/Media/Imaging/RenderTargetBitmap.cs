@@ -40,7 +40,7 @@ namespace Windows.UI.Xaml.Media.Imaging
 		{
 			async Task SetSourceAsync(CancellationToken ct)
 			{
-				Stream = await GetImageStream(element);
+			/*	Stream = */await GetImageStream(element);
 			}
 
 			return AsyncAction.FromTask(SetSourceAsync);
@@ -50,7 +50,7 @@ namespace Windows.UI.Xaml.Media.Imaging
 		{
 			async Task SetSourceAsync(CancellationToken ct)
 			{
-				Stream = await GetImageStream(element, scaledWidth, scaledHeight);
+				/*Stream =*/ await GetImageStream(element, scaledWidth, scaledHeight);
 			}
 
 			return AsyncAction.FromTask(SetSourceAsync);

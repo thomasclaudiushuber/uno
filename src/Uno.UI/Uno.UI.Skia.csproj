@@ -109,4 +109,12 @@
 			<UndefineProperties>TargetFramework</UndefineProperties>
 		</ProjectReference>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="UI\Xaml\Media\Imaging\RenderTargetBitmap.Skia.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="UI\Xaml\Media\Imaging\RenderTargetBitmap.Skia.cs" />
+	</ItemGroup>
 </Project>
