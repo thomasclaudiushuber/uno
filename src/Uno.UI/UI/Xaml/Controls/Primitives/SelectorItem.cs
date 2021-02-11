@@ -117,6 +117,15 @@ namespace Windows.UI.Xaml.Controls.Primitives
 			}
 		}
 
+#if __MACOS__ // todo: move to __FILENAME__.macos.cs
+		protected internal override void OnPointerUpdatedFromScrolling(bool isPointerOver)
+		{
+			IsPointerOver = isPointerOver;
+
+			UpdateCommonStatesWithoutNeedsLayout();
+		}
+#endif
+
 		partial void OnIsSelectedChangedPartial(bool oldIsSelected, bool newIsSelected)
 		{
 			UpdateCommonStates();

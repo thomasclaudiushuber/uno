@@ -788,16 +788,18 @@ namespace Microsoft.UI.Xaml.Controls
 		// Returns True when the provided pointer Id does not match the currently tracked Id.
 		private bool IgnorePointerId(PointerRoutedEventArgs args)
 		{
-			uint pointerId = args.Pointer.PointerId;
+			if (args?.Pointer.PointerId is uint pointerId)
+			{
+				if (m_trackedPointerId == 0)
+				{
+					m_trackedPointerId = pointerId;
+				}
+				else if (m_trackedPointerId != pointerId)
+				{
+					return true;
+				}
+			}
 
-			if (m_trackedPointerId == 0)
-			{
-				m_trackedPointerId = pointerId;
-			}
-			else if (m_trackedPointerId != pointerId)
-			{
-				return true;
-			}
 			return false;
 		}
 
@@ -888,6 +890,16 @@ namespace Microsoft.UI.Xaml.Controls
 		{
 			ProcessPointerCanceled(args);
 		}
+
+#if __MACOS__
+		protected internal override void OnPointerUpdatedFromScrolling(bool isPointerOver)
+		{
+			if (m_isPointerOver && !isPointerOver)
+			{
+				ProcessPointerCanceled(null);
+			}
+		}
+#endif
 
 		private void OnIsEnabledChanged(object sender, DependencyPropertyChangedEventArgs args)
 		{

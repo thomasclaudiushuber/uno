@@ -42,6 +42,24 @@ namespace Windows.UI.Xaml
 
 			_trackingArea = new NSTrackingArea(this.Bounds, options, this, null);
 			AddTrackingArea(_trackingArea);
+
+			UpdatePointerIfNecessary();
+		}
+
+		private void UpdatePointerIfNecessary()
+		{
+			var rawPosition = Window.MouseLocationOutsideOfEventStream;
+			var position = ConvertPointFromView(rawPosition, null);
+			var isPointerOver = Bounds.Contains(position);
+
+			if (IsPointerOver != isPointerOver)
+			{
+				OnPointerUpdatedFromScrolling(isPointerOver);
+			}
+		}
+
+		protected internal virtual void OnPointerUpdatedFromScrolling(bool isPointerOver)
+		{
 		}
 
 		public override void MouseDown(NSEvent evt)
