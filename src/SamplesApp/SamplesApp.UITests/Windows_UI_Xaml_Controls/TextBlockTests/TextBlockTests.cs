@@ -483,5 +483,22 @@ namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.TextBlockTests
 				ImageAssert.AreEqual(snapshotTextHidden, r, snapshot, r);
 			}
 		}
+
+		[Test]
+		[AutoRetry]
+		public void When_TextSize_Then_RelativeSize()
+		{
+			Run("UITests.Windows_UI_Xaml_Controls.TextBlockControl.TextBlock_RelativeTextSize");
+
+			var textBlockHeight = _app.GetLogicalRect("textBlock").Height;
+			var textBoxHeight = _app.GetLogicalRect("textBox").Height;
+
+			using var _ = new AssertionScope();
+
+			const float expectedHeight = 155f;
+			const float precision = expectedHeight * 0.12f; // 12% tolerance
+			textBlockHeight.Should().BeApproximately(expectedHeight, precision);
+			textBoxHeight.Should().BeApproximately(expectedHeight, precision);
+		}
 	}
 }
