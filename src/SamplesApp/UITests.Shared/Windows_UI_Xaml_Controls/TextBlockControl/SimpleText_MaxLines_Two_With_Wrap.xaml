@@ -28,6 +28,9 @@
 		<TextBlock>Line Height <Run Text="{Binding Value, ElementName=lineheight}" />:</TextBlock>
 		<Slider Minimum="5" Maximum="170" Value="20" x:Name="lineheight" />
 
+		<TextBlock>Margin <Run Text="{Binding Value, ElementName=margin}" />:</TextBlock>
+		<Slider Minimum="0" Maximum="50" Value="0" x:Name="margin" />
+
 		<wasm:TextBlock>
 			(WASM ONLY) Cache: Hits=
 			<Run x:Name="hits">0</Run> , Misses=
@@ -40,6 +43,7 @@
 				FontSize="{Binding Value, ElementName=fontsize}"
 				TextWrapping="Wrap"
 				LineHeight="{Binding Value, ElementName=lineheight}"
+				Margin="{Binding Value, ElementName=margin}"
 				MaxLines="2">
 				<Run FontWeight="Bold">WRAPPING (Wrap)/MaxLines=2</Run> This is a very very very very long text that *should* wrap because it goes out of the screen
 			</TextBlock>
@@ -50,6 +54,7 @@
 				FontSize="{Binding Value, ElementName=fontsize}"
 				TextWrapping="WrapWholeWords"
 				LineHeight="{Binding Value, ElementName=lineheight}"
+				Margin="{Binding Value, ElementName=margin}"
 				MaxLines="2">
 				<Run FontWeight="Bold">WRAPPING (WrapWholeWords)/MaxLines=2</Run> This is a very very very very long text that *should* wrap because it goes out of the screen
 			</TextBlock>
@@ -61,21 +66,24 @@
 				TextWrapping="Wrap"
 				TextTrimming="CharacterEllipsis"
 				LineHeight="{Binding Value, ElementName=lineheight}"
+				Margin="{Binding Value, ElementName=margin}"
 				MaxLines="2">
 				<Run FontWeight="Bold">WRAPPING (WrapWholeWords/CharacterEllipsis)/MaxLines=2</Run> This is a very very very very long text that *should* wrap because it goes out of the screen
 			</TextBlock>
 		</Border>
 		<Border Width="{Binding Value, ElementName=slider}" Height="{Binding Value, ElementName=sliderV}" Background="Yellow" x:Name="border4">
-			<TextBlock
-				FontSize="{Binding Value, ElementName=fontsize}"
-				x:Name="textwrapwordsellipsis"
-				TextWrapping="WrapWholeWords"
-				TextTrimming="CharacterEllipsis"
-				LineHeight="{Binding Value, ElementName=lineheight}"
-				MaxLines="2">
-				<Run FontWeight="Bold">WRAPPING (Wrap/CharacterEllipsis)/MaxLines=2</Run> This is a very very very very long text that *should* wrap because it goes out of the screen
-			</TextBlock>
+			<ScrollViewer>
+				<TextBlock
+					FontSize="{Binding Value, ElementName=fontsize}"
+					x:Name="textwrapwordsellipsis"
+					TextWrapping="WrapWholeWords"
+					TextTrimming="CharacterEllipsis"
+					LineHeight="{Binding Value, ElementName=lineheight}"
+					Margin="{Binding Value, ElementName=margin}"
+					MaxLines="2">
+					<Run FontWeight="Bold">WRAPPING (Wrap/CharacterEllipsis)/MaxLines=2</Run> This is a very very very very long text that *should* wrap because it goes out of the screen
+				</TextBlock>
+			</ScrollViewer>
 		</Border>
 	</StackPanel>
-
 </Page>

@@ -21,6 +21,7 @@ namespace Windows.UI.Xaml.Controls
 	partial class NativeScrollContentPresenter : NSScrollView, IHasSizeThatFits
 	{
 		private readonly WeakReference<ScrollViewer> _scrollViewer;
+		private long _marginRegistration;
 
 		public NativeScrollContentPresenter(ScrollViewer scroller) : this()
 		{
@@ -34,7 +35,7 @@ namespace Windows.UI.Xaml.Controls
 			DrawsBackground = false;
 		}
 
-		public nfloat ZoomScale 
+		public nfloat ZoomScale
 		{
 			get => Magnification;
 			set => Magnification = value;
@@ -59,9 +60,11 @@ namespace Windows.UI.Xaml.Controls
 			get => HasHorizontalScroller;
 			set => HasHorizontalScroller = value;
 		}
+
 		public override bool NeedsLayout
 		{
-			get => base.NeedsLayout; set
+			get => base.NeedsLayout;
+			set
 			{
 				base.NeedsLayout = value;
 
@@ -88,9 +91,33 @@ namespace Windows.UI.Xaml.Controls
 
 			DocumentView = newView;
 
+			if (previousView is FrameworkElement oldElement)
+			{
+				oldElement.UnregisterPropertyChangedCallback(FrameworkElement.MarginProperty, _marginRegistration);
+			}
+
 			// This is not needed on iOS/Android because the native ScrollViewer
 			// relies on the Children property, not on a `DocumentView` property.
+			//newView?.SetParent(this);
 			newView?.SetParent(TemplatedParent);
+
+			if (newView is FrameworkElement newElement)
+			{
+				newElement.LayoutUpdated += LayoutUpdated;
+
+				_marginRegistration = newElement
+					.RegisterPropertyChangedCallback(FrameworkElement.MarginProperty, OnMarginChanged);
+			}
+
+			void LayoutUpdated(object snd, object evt)
+			{
+				//NeedsLayout = true;
+			}
+
+			void OnMarginChanged(DependencyObject sender, DependencyProperty dp)
+			{
+				this.NeedsLayout = true;
+			}
 		}
 
 		private void OnLiveScroll(object sender, NSNotificationEventArgs e)
@@ -106,6 +133,7 @@ namespace Windows.UI.Xaml.Controls
 		}
 
 		public Rect MakeVisible(UIElement visual, Rect rectangle) =>
-			throw new NotImplementedException("The member Rect ScrollContentPresenter.MakeVisible(UIElement visual, Rect rectangle) is not implemented in Uno.");
+			throw new NotImplementedException(
+				"The member Rect ScrollContentPresenter.MakeVisible(UIElement visual, Rect rectangle) is not implemented in Uno.");
 	}
 }
