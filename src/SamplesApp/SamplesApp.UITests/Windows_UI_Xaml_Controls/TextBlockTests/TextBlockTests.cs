@@ -345,7 +345,7 @@ namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.TextBlockTests
 
 			var stackTextBlockName = "stackTextBlock";
 			var maxLineSlider = _app.Marked("slider");
-			
+
 			_app.WaitForElement(maxLineSlider);
 
 			var numberOfLines = 1;
@@ -495,8 +495,8 @@ namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.TextBlockTests
 
 			using var _ = new AssertionScope();
 
-			const float expectedHeight = 155f;
-			const float precision = expectedHeight * 0.12f; // 12% tolerance
+			const float expectedHeight = 164f;
+			const float precision = 20f; // On iOS he result is 148 and MacOS it's 146
 			textBlockHeight.Should().BeApproximately(expectedHeight, precision);
 			textBoxHeight.Should().BeApproximately(expectedHeight, precision);
 		}
