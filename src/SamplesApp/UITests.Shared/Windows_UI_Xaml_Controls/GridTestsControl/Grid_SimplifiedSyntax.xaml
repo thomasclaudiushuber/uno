@@ -1,0 +1,71 @@
+﻿<Page
+	x:Class="UITests.Windows_UI_Xaml_Controls.GridTestsControl.Grid_SimplifiedSyntax"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<Grid Width="200" Height="200" RowSpacing="2" ColumnSpacing="2"
+		Background="Black"
+		ColumnDefinitions="1*,2*,3*,4*,5*,6*,7*"
+		RowDefinitions="7*,6*,5*,4*,3*,2*,1*">
+
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="0" Grid.Row="0"  Fill="Red" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="1" Grid.Row="0"  Fill="Orange" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="2" Grid.Row="0"  Fill="Yellow" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="3" Grid.Row="0"  Fill="Green" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="4" Grid.Row="0"  Fill="Blue" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="5" Grid.Row="0"  Fill="Indigo" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="6" Grid.Row="0"  Fill="Violet" />
+
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="0" Grid.Row="1"  Fill="Orange" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="1" Grid.Row="1"  Fill="Yellow" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="2" Grid.Row="1"  Fill="Green" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="3" Grid.Row="1"  Fill="Blue" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="4" Grid.Row="1"  Fill="Indigo" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="5" Grid.Row="1"  Fill="Violet" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="6" Grid.Row="1"  Fill="Red" />
+
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="0" Grid.Row="2"  Fill="Yellow" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="1" Grid.Row="2"  Fill="Green" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="2" Grid.Row="2"  Fill="Blue" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="3" Grid.Row="2"  Fill="Indigo" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="4" Grid.Row="2"  Fill="Violet" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="5" Grid.Row="2"  Fill="Red" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="6" Grid.Row="2"  Fill="Orange" />
+
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="0" Grid.Row="3"  Fill="Green" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="1" Grid.Row="3"  Fill="Blue" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="2" Grid.Row="3"  Fill="Indigo" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="3" Grid.Row="3"  Fill="Violet" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="4" Grid.Row="3"  Fill="Red" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="5" Grid.Row="3"  Fill="Orange" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="6" Grid.Row="3"  Fill="Yellow" />
+
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="0" Grid.Row="4"  Fill="Blue" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="1" Grid.Row="4"  Fill="Indigo" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="2" Grid.Row="4"  Fill="Violet" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="3" Grid.Row="4"  Fill="Red" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="4" Grid.Row="4"  Fill="Orange" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="5" Grid.Row="4"  Fill="Yellow" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="6" Grid.Row="4"  Fill="Green" />
+
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="0" Grid.Row="5"  Fill="Indigo" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="1" Grid.Row="5"  Fill="Violet" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="2" Grid.Row="5"  Fill="Red" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="3" Grid.Row="5"  Fill="Orange" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="4" Grid.Row="5"  Fill="Yellow" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="5" Grid.Row="5"  Fill="Green" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="6" Grid.Row="5"  Fill="Blue" />
+
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="0" Grid.Row="6"  Fill="Violet" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="1" Grid.Row="6"  Fill="Red" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="2" Grid.Row="6"  Fill="Orange" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="3" Grid.Row="6"  Fill="Yellow" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="4" Grid.Row="6"  Fill="Green" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="5" Grid.Row="6"  Fill="Blue" />
+		<Rectangle MinHeight="5" MinWidth="5" Grid.Column="6" Grid.Row="6"  Fill="Indigo" />
+	</Grid>
+</Page>
