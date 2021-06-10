@@ -13,11 +13,15 @@ using Uno.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Media;
 using Windows.Devices.Sensors;
+using Uno.Extensions;
+using Microsoft.Extensions.Logging;
+using Windows.Storage.Pickers;
+using Uno.AuthenticationBroker;
 
 namespace Windows.UI.Xaml
 {
 	[Activity(ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode, WindowSoftInputMode = SoftInput.AdjustPan | SoftInput.StateHidden)]
-	public class ApplicationActivity : Controls.NativePage
+	public class ApplicationActivity : Controls.NativePage, Uno.UI.Composition.ICompositionRoot
 	{
 
 		/// The windows model implies only one managed activity.
@@ -27,6 +31,8 @@ namespace Windows.UI.Xaml
 		internal LayoutProvider LayoutProvider { get; private set; }
 
 		private InputPane _inputPane;
+		private View _content;
+		private Android.Views.Window _window;
 
 		public ApplicationActivity(IntPtr ptr, Android.Runtime.JniHandleOwnership owner) : base(ptr, owner)
 		{
@@ -46,6 +52,9 @@ namespace Windows.UI.Xaml
 			_inputPane.Showing += OnInputPaneVisibilityChanged;
 			_inputPane.Hiding += OnInputPaneVisibilityChanged;
 		}
+
+		View Uno.UI.Composition.ICompositionRoot.Content => _content;
+		Android.Views.Window Uno.UI.Composition.ICompositionRoot.Window => _window ??= base.Window;
 
 		public override void OnAttachedToWindow()
 		{
@@ -116,8 +125,13 @@ namespace Windows.UI.Xaml
 
 		protected override void OnCreate(Bundle bundle)
 		{
+			if (Uno.CompositionConfiguration.UseCompositorThread)
+			{
+				Uno.UI.Composition.CompositorThread.Start(this);
+			}
+
 			base.OnCreate(bundle);
-			
+
 			LayoutProvider = new LayoutProvider(this);
 			LayoutProvider.LayoutChanged += OnLayoutChanged;
 			LayoutProvider.InsetsChanged += OnInsetsChanged;
@@ -137,6 +151,8 @@ namespace Windows.UI.Xaml
 
 		public override void SetContentView(View view)
 		{
+			_content = view;
+
 			if (view != null)
 			{
 				if (view.IsAttachedToWindow)
@@ -163,6 +179,8 @@ namespace Windows.UI.Xaml
 			base.OnResume();
 
 			RaiseConfigurationChanges();
+
+			WebAuthenticationBrokerProvider.OnMainActivityResumed();
 		}
 
 		protected override void OnPause()
@@ -207,11 +225,51 @@ namespace Windows.UI.Xaml
 
 		protected override void OnNewIntent(Intent intent)
 		{
+			if (this.Log().IsEnabled(LogLevel.Debug))
+			{
+				this.Log().LogDebug($"New application activity intent received, data: {intent?.Data?.ToString() ?? "(null)"}");
+			}
 			base.OnNewIntent(intent);
-			this.Intent = intent;
-			// In case this activity is in SingleTask mode, we try to handle
-			// the intent (for protocol activation scenarios).
-			(Application as NativeApplication)?.TryHandleIntent(intent);
+			if (intent != null)
+			{
+				this.Intent = intent;
+
+				if (this.Log().IsEnabled(LogLevel.Debug))
+				{
+					this.Log().LogDebug($"Application activity intent updated. Attempting to handle intent.");
+				}
+
+				// In case this activity is in SingleTask mode, we try to handle
+				// the intent (for protocol activation scenarios).
+				var handled = (Application as NativeApplication)?.TryHandleIntent(intent) ?? false;
+
+				if (this.Log().IsEnabled(LogLevel.Debug))
+				{
+					if (handled)
+					{
+						this.Log().LogDebug($"Native application handled the intent.");
+					}
+					else
+					{
+						this.Log().LogDebug($"Native application did not handle the intent.");
+					}
+				}
+			}
+		}
+
+		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+		{
+			base.OnActivityResult(requestCode, resultCode, data);
+
+			switch (requestCode)
+			{
+				case FolderPicker.RequestCode:
+					FolderPicker.TryHandleIntent(data, resultCode);
+					break;
+				case FileOpenPicker.RequestCode:
+					FileOpenPicker.TryHandleIntent(data, resultCode);
+					break;
+			}
 		}
 
 		/// <summary>

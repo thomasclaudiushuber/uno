@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Windows.UI.Xaml;
@@ -7,11 +7,43 @@ using Windows.UI.Xaml.Automation.Peers;
 using Windows.UI.Xaml.Controls;
 using Uno.UI.Xaml.Controls;
 using System.ComponentModel;
+using Windows.UI.Xaml.Media;
+using Microsoft.Extensions.Logging;
 
 namespace Uno.UI
 {
 	public static class FeatureConfiguration
 	{
+		public static class ApiInformation
+		{
+			/// <summary>
+			/// Determines if runtime use of not implemented members raises an exception, or logs an error message.
+			/// </summary>
+			public static bool IsFailWhenNotImplemented
+			{
+				get => Windows.Foundation.Metadata.ApiInformation.IsFailWhenNotImplemented;
+				set => Windows.Foundation.Metadata.ApiInformation.IsFailWhenNotImplemented = value;
+			}
+
+			/// <summary>
+			/// Determines if runtime use of not implemented members is logged only once, or at each use.
+			/// </summary>
+			public static bool AlwaysLogNotImplementedMessages
+			{
+				get => Windows.Foundation.Metadata.ApiInformation.AlwaysLogNotImplementedMessages;
+				set => Windows.Foundation.Metadata.ApiInformation.AlwaysLogNotImplementedMessages = value;
+			}
+
+			/// <summary>
+			/// The message log level used when a not implemented member is used at runtime, if <see cref="IsFailWhenNotImplemented"/> is false.
+			/// </summary>
+			public static LogLevel NotImplementedLogLevel
+			{
+				get => Windows.Foundation.Metadata.ApiInformation.NotImplementedLogLevel;
+				set => Windows.Foundation.Metadata.ApiInformation.NotImplementedLogLevel = value;
+			}
+		}
+
 		public static class AutomationPeer
 		{
 			/// <summary>
@@ -113,7 +145,6 @@ namespace Uno.UI
 			public static bool UseLegacyTemplateSelectorOverload { get; set; } = false;
 		}
 
-
 		public static class DependencyObject
 		{
 			/// <summary>
@@ -127,11 +158,7 @@ namespace Uno.UI
 			/// See https://github.com/unoplatform/uno/issues/4730 for details.
 			/// </remarks>
 			public static bool IsStoreHardReferenceEnabled { get; set; }
-#if __WASM__
-				= false;
-#else
 				= true;
-#endif
 		}
 
 		public static class Font
@@ -310,14 +337,14 @@ namespace Uno.UI
 			public static IDictionary<Type, bool> UseUWPDefaultStylesOverride { get; } = new Dictionary<Type, bool>();
 
 			/// <summary>
-			/// This enables native frame navigation on Android and iOS by setting related classes (<see cref="Frame"/>, <see cref="CommandBar"/>
-			/// and <see cref="AppBarButton"/>) to use their native styles.
+			/// This enables native frame navigation on Android and iOS by setting related classes (<see cref="Frame"/>, <see cref="Windows.UI.Xaml.Controls.CommandBar"/>
+			/// and <see cref="Windows.UI.Xaml.Controls.AppBarButton"/>) to use their native styles.
 			/// </summary>
 			public static void ConfigureNativeFrameNavigation()
 			{
 				SetUWPDefaultStylesOverride<Frame>(useUWPDefaultStyle: false);
-				SetUWPDefaultStylesOverride<CommandBar>(useUWPDefaultStyle: false);
-				SetUWPDefaultStylesOverride<AppBarButton>(useUWPDefaultStyle: false);
+				SetUWPDefaultStylesOverride<Windows.UI.Xaml.Controls.CommandBar>(useUWPDefaultStyle: false);
+				SetUWPDefaultStylesOverride<Windows.UI.Xaml.Controls.AppBarButton>(useUWPDefaultStyle: false);
 			}
 
 			/// <summary>
@@ -363,6 +390,14 @@ namespace Uno.UI
 			/// referencing the ** type ** ScrollViewer in any way.
 			/// </remarks>
 			public static ScrollViewerUpdatesMode DefaultUpdatesMode { get; set; } = ScrollViewerUpdatesMode.AsynchronousIdle;
+
+			/// <summary>
+			/// Defines the delay after which the scrollbars hide themselves when pointer is not over.<br/>
+			/// Default is 4 sec.<br/>
+			/// Setting this to <see cref="TimeSpan.MaxValue"/> will completely disable the auto hide feature.
+			/// </summary>
+			/// <remarks>This is effective only for managed scrollbars (WASM, macOS and Skia for now)</remarks>
+			public static TimeSpan? DefaultAutoHideDelay { get; set; }
 
 #if __ANDROID__
 			/// <summary>
@@ -496,6 +531,39 @@ namespace Uno.UI
 		{
 #if __IOS__
 			public static bool UseLegacyStyle { get; set; } = false;
+#endif
+		}
+
+		public static class CommandBar
+		{
+#if __IOS__
+			/// <summary>
+			/// Gets or Set whether the AllowNativePresenterContent feature is on or off.
+			/// </summary>
+			/// <remarks>
+			/// This feature is used in the context of the sample application to test NavigationBars outside of a NativeFramePresenter for
+			/// UI Testing. In general cases, this should not happen as the bar may be moved back to to this presenter while
+			/// another page is already visible, making this bar overlay on top of another.
+			/// </remarks>
+			/// <returns>True if this feature is on, False otherwise</returns>
+			public static bool AllowNativePresenterContent { get; set; } = false;
+#endif
+		}
+
+		public static class AppBarButton
+		{
+#if __ANDROID__
+			/// <summary>
+			/// Gets or set whether the EnableBitmapIconTint feature is on or off.
+			/// </summary>
+			/// <remarks>
+			/// This Feature will allow any <see cref="Windows.UI.Xaml.Controls.AppBarButton"/>
+			/// inside a <see cref="Windows.UI.Xaml.Controls.CommandBar"/> to use the Foreground <see cref="SolidColorBrush"/>
+			/// as their tint Color.
+			/// <para/>Default value is False.
+			/// </remarks>
+			/// <returns>True if this feature is on, False otherwise</returns>
+			public static bool EnableBitmapIconTint { get; set; } = false;
 #endif
 		}
 	}

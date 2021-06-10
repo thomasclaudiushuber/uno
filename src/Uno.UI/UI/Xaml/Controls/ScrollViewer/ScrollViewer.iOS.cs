@@ -57,16 +57,56 @@ namespace Windows.UI.Xaml.Controls
 			}
 		}
 
-		partial void ChangeViewScroll(double? horizontalOffset, double? verticalOffset, bool disableAnimation)
+		private (double? horizontal, double? vertical, bool disableAnimation)? _pendingChangeView;
+
+		protected override void OnAfterArrange()
+		{
+			base.OnAfterArrange();
+
+			if (_pendingChangeView is {} req)
+			{
+				var success = ChangeViewNative(req.horizontal, req.vertical, null, req.disableAnimation);
+				if (success || !IsArrangeDirty)
+				{
+					_pendingChangeView = default;
+				}
+			}
+		}
+
+		private bool ChangeViewNative(double? horizontalOffset, double? verticalOffset, float? zoomFactor, bool disableAnimation)
 		{
 			if (_scrollableContainer != null)
 			{
 				// iOS doesn't limit the offset to the scrollable bounds by itself
-				var newOffset = new CGPoint(horizontalOffset ?? HorizontalOffset, verticalOffset ?? VerticalOffset)
-					.Clamp(CGPoint.Empty, _scrollableContainer.UpperScrollLimit);
+				var limit = _scrollableContainer.UpperScrollLimit;
+				var desiredOffsets = new Windows.Foundation.Point(horizontalOffset ?? HorizontalOffset, verticalOffset ?? VerticalOffset);
+				var clampedOffsets = new Windows.Foundation.Point(MathEx.Clamp(desiredOffsets.X, 0, limit.X), MathEx.Clamp(desiredOffsets.Y, 0, limit.Y));
 
-				_scrollableContainer.SetContentOffset(newOffset, !disableAnimation);
+				var success = desiredOffsets == clampedOffsets;
+				if (!success && IsArrangeDirty)
+				{
+					// If the the requested offsets are out-of - bounds, but we actually does have our final bounds yet,
+					// we allow to set the desired offsets. If needed, they will then be clamped by the OnAfterArrange().
+					// This is needed to allow a ScrollTo before the SV has been layouted.
+
+					_pendingChangeView = (horizontalOffset, verticalOffset, disableAnimation);
+					_scrollableContainer.SetContentOffset(desiredOffsets, !disableAnimation);
+				}
+				else
+				{
+					_scrollableContainer.SetContentOffset(clampedOffsets, !disableAnimation);
+				}
+
+				if(zoomFactor is { } zoom)
+				{
+					ChangeViewZoom(zoom, disableAnimation);
+				}
+
+				// Return true if successfully scrolled to asked offsets
+				return success;
 			}
+
+			return false;
 		}
 
 		partial void OnZoomModeChangedPartial(ZoomMode zoomMode)
@@ -86,7 +126,7 @@ namespace Windows.UI.Xaml.Controls
 			}
 		}
 
-		partial void ChangeViewZoom(float zoomFactor, bool disableAnimation)
+		private void ChangeViewZoom(float zoomFactor, bool disableAnimation)
 		{
 			_scrollableContainer?.SetZoomScale(zoomFactor, animated: !disableAnimation);
 		}

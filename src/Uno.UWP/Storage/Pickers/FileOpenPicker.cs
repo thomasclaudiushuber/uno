@@ -47,7 +47,7 @@ namespace Windows.Storage.Pickers
 			set => _commitButtonText = value ?? throw new ArgumentNullException(nameof(value));
 		}
 
-#if __SKIA__
+#if __SKIA__ || __WASM__ || __IOS__ || __ANDROID__ || __MACOS__
 		public FileOpenPicker()
 		{
 			InitializePlatform();
@@ -92,7 +92,7 @@ namespace Windows.Storage.Pickers
 		{
 			if (FileTypeFilter.Count == 0)
 			{
-				throw new InvalidOperationException("You must provide at least a general file type filter ('.*')");
+				throw new InvalidOperationException("You must provide at least a general file type filter ('*')");
 			}
 		}
 	}

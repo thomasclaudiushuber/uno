@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Uno.UI.RuntimeTests.Extensions;
 
 namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml_Controls
 {
@@ -25,52 +26,65 @@ namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml_Controls
 			var style = Windows.UI.Xaml.Application.Current.Resources["NativeDefaultFrame"] as Style;
 			Assert.IsNotNull(style);
 
-			var SUT = new Frame() {
+			var SUT = new Frame()
+			{
 				Style = style
 			};
 
 			TestServices.WindowHelper.WindowContent = SUT;
 
-			int GetAllMyPages()
-				=> SUT.EnumerateAllChildren(v => v is MyPage).Count();
-
-			/// Actively waiting for pages to be stacked is
-			/// required as NativeFramePresenter.UpdateStack awaits
-			/// for animations to finish, and there's no way to determine
-			/// from the Frame PoV that the animation is finished.
-			async Task WaitForPages(int count)
-			{
-				var sw = Stopwatch.StartNew();
-
-				while(sw.Elapsed < TimeSpan.FromSeconds(5))
-				{
-					await TestServices.WindowHelper.WaitForIdle();
-
-					if (GetAllMyPages() == count)
-					{
-						break;
-					}
-				}
-
-				Assert.AreEqual(count, GetAllMyPages());
-			}
-
-			await WaitForPages(0);
+			await SUT.WaitForPages(0);
 
 			SUT.Navigate(typeof(MyPage));
 
-			await WaitForPages(1);
+			await SUT.WaitForPages(1);
 
 			SUT.Navigate(typeof(MyPage));
 
-			await WaitForPages(2);
+			await SUT.WaitForPages(2);
 
 			SUT.GoBack();
 
-			await WaitForPages(1);
+			await SUT.WaitForPages(1);
+		}
+
+
+		[TestMethod]
+		[RunsOnUIThread]
+		public async Task When_NavigateBackSkipingPages()
+		{
+			var style = Windows.UI.Xaml.Application.Current.Resources["NativeDefaultFrame"] as Style;
+			Assert.IsNotNull(style);
+
+			var SUT = new Frame()
+			{
+				Style = style
+			};
+
+			TestServices.WindowHelper.WindowContent = SUT;
+
+			await SUT.WaitForPages(0);
+
+			SUT.Navigate(typeof(MyPage));
+
+			await SUT.WaitForPages(1);
+
+			SUT.Navigate(typeof(MyPage));
+
+			await SUT.WaitForPages(2);
+
+			SUT.Navigate(typeof(MyPage));
+
+			await SUT.WaitForPages(3);
+
+			//Remove the previous page to jump from page 3 to page 1
+			SUT.BackStack.Remove(SUT.BackStack.LastOrDefault());
+
+			SUT.GoBack();
+
+			await SUT.WaitForPages(1);
 		}
 	}
-
 	partial class MyPage : Page
 	{
 	}

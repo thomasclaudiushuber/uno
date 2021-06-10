@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Uno;
+using Uno.Disposables;
 using Uno.Extensions;
 using Uno.UI.Samples.Controls;
 using Uno.UI.Samples.UITests.Helpers;
@@ -18,7 +20,8 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace UITests.Shared.Windows_Storage.Pickers
 {
-	[Sample("Windows.Storage", ViewModelType = typeof(FileSavePickerTestsViewModel))]
+	[Sample("Windows.Storage", ViewModelType = typeof(FileSavePickerTestsViewModel), IsManualTest = true,
+		Description = "Allows testing all features of FileSavePicker. Currently not supported on Android, iOS, macOS and GTK. Not selecting a file should not cause an exception")]
 	public sealed partial class FileSavePickerTests : Page
 	{
 		public FileSavePickerTests()
@@ -49,6 +52,13 @@ namespace UITests.Shared.Windows_Storage.Pickers
 
 		public FileSavePickerTestsViewModel(CoreDispatcher dispatcher) : base(dispatcher)
 		{
+#if __WASM__
+			WinRTFeatureConfiguration.Storage.Pickers.WasmConfiguration = WasmPickerConfiguration.FileSystemAccessApi;
+			Disposables.Add(Disposable.Create(() =>
+			{
+				WinRTFeatureConfiguration.Storage.Pickers.WasmConfiguration = WasmPickerConfiguration.FileSystemAccessApiWithFallback;
+			}));
+#endif
 		}
 
 		public PickerLocationId[] SuggestedStartLocations { get; } = Enum.GetValues(typeof(PickerLocationId)).OfType<PickerLocationId>().ToArray();
@@ -88,6 +98,25 @@ namespace UITests.Shared.Windows_Storage.Pickers
 				RaisePropertyChanged();
 			}
 		}
+
+#if __WASM__
+		public bool UseNativePicker
+		{
+			get => WinRTFeatureConfiguration.Storage.Pickers.WasmConfiguration == WasmPickerConfiguration.FileSystemAccessApi;
+			set
+			{
+				var usesNativePicker = WinRTFeatureConfiguration.Storage.Pickers.WasmConfiguration == WasmPickerConfiguration.FileSystemAccessApi;
+				if (usesNativePicker != value)
+				{
+					WinRTFeatureConfiguration.Storage.Pickers.WasmConfiguration = value ?
+						WasmPickerConfiguration.FileSystemAccessApi :
+						WasmPickerConfiguration.DownloadUpload;
+
+					RaisePropertyChanged();
+				}
+			}
+		}
+#endif
 
 		public string StatusMessage
 		{

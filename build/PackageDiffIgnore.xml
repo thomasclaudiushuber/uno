@@ -3386,7 +3386,7 @@
 				reason="Internal helper that should not be public" />
 			<Member
 				fullName="System.Void Windows.UI.Composition.CompositionPropertySet..ctor()"
-				reason="Constructor is not public in UWP" />			
+				reason="Constructor is not public in UWP" />
 			<Member
 				fullName="System.Void Windows.Foundation.PropertyValue..ctor()"
 				reason="Constructor is not public in UWP" />
@@ -3401,16 +3401,27 @@
 				reason="Constructor not public in UWP" />
 			<Member
 				fullName="System.Void Windows.ApplicationModel.DataTransfer.DataRequest..ctor()"
-				reason="Constructor not public in UWP" />																		
+				reason="Constructor not public in UWP" />
 			<Member
 				fullName="System.Double Windows.UI.Xaml.Media.Animation.BounceEase.BounceEaseIn(System.Double currentTime, System.Double startValue, System.Double finalValue, System.Double duration)"
-				reason="Constructor not public in UWP" />																		
+				reason="Constructor not public in UWP" />
 			<Member
 				fullName="System.Double Windows.UI.Xaml.Media.Animation.BounceEase.BounceEaseOut(System.Double currentTime, System.Double startValue, System.Double finalValue, System.Double duration)"
-				reason="Constructor not public in UWP" />																		
+				reason="Constructor not public in UWP" />
 		 </Methods>
 	</IgnoreSet>
 	<IgnoreSet baseVersion="3.5.1">
+		<Types>
+			<Member
+				fullName="Windows.UI.Xaml.Shapes.ArbitraryShapeBase"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="Windows.UI.Xaml.Controls.NativeScrollContentPresenter"
+				reason="MacOS only, not part of the WinUI API." />
+			<Member
+				fullName="Windows.UI.Xaml.Controls.IScrollContentPresenter"
+				reason="Skia and MacOS only, not part of the WinUI API." />
+		</Types>
 		<Methods>
 			<Member
 				fullName="System.Void Windows.Storage.Pickers.FileExtensionVector..ctor()"
@@ -3421,8 +3432,317 @@
 			<Member
 				fullName="System.Void Windows.Storage.Pickers.FilePickerSelectedFilesArray..ctor()"
 				reason="Constructor not public in UWP" />
+			<Member
+				fullName="System.Void Windows.Storage.StorageProvider..ctor()"
+				reason="Constructor not public in UWP" />
+			<Member
+				fullName="Windows.Foundation.IAsyncOperation`1&lt;Windows.Storage.StorageFile&gt; Windows.Storage.StorageFolder.SafeGetFileAsync(System.String path)"
+				reason="This method does not exist in UWP" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Shapes.Shape.OnFillChanged(Windows.UI.Xaml.Media.Brush newValue)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Shapes.Shape.OnFillUpdated(Windows.UI.Xaml.Media.Brush newValue)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Shapes.Shape.OnStrokeUpdated(Windows.UI.Xaml.Media.Brush newValue)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Shapes.Shape.OnStretchUpdated(Windows.UI.Xaml.Media.Stretch newValue)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Shapes.Shape.OnStrokeThicknessUpdated(System.Double newValue)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Shapes.Shape.OnStrokeDashArrayUpdated(Windows.UI.Xaml.Media.DoubleCollection newValue)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Shapes.Shape.RefreshShape(System.Boolean forceRefresh)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="Windows.Foundation.Rect Windows.UI.Xaml.Shapes.Shape.GetDrawArea(Android.Graphics.Canvas canvas)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Shapes.Shape.DrawFill(Android.Graphics.Canvas canvas, Windows.Foundation.Rect fillArea, Android.Graphics.Path fillPath)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Shapes.Shape.DrawStroke(Android.Graphics.Canvas canvas, Windows.Foundation.Rect strokeArea, System.Action`3&lt;Android.Graphics.Canvas,Windows.Foundation.Rect,Android.Graphics.Paint&gt; drawingMethod)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Shapes.Shape.SetStrokeDashEffect(Android.Graphics.Paint strokePaint)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Shapes.Shape.OnStrokeDashArrayUpdated(Windows.UI.Xaml.Media.DoubleCollection newValue)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Shapes.Shape.RefreshShape(System.Boolean forceRefresh)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="Windows.Foundation.Rect Windows.UI.Xaml.Shapes.Shape.GetDrawArea(Android.Graphics.Canvas canvas)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Shapes.Shape.DrawFill(Android.Graphics.Canvas canvas, Windows.Foundation.Rect fillArea, Android.Graphics.Path fillPath)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Shapes.Shape.DrawStroke(Android.Graphics.Canvas canvas, Windows.Foundation.Rect strokeArea, System.Action`3&lt;Android.Graphics.Canvas,Windows.Foundation.Rect,Android.Graphics.Paint&gt; drawingMethod)"
+				reason="Not part of the WinUI API." />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Shapes.Shape.SetStrokeDashEffect(Android.Graphics.Paint strokePaint)"
+				reason="Not part of the WinUI API." />
+
+			<Member
+				fullName="Windows.UI.Xaml.Automation.Provider.IRawElementProviderSimple Windows.UI.Xaml.Automation.Peers.AutomationPeer.ProviderFromPeer(Windows.UI.Xaml.Automation.Peers.AutomationPeer peer)"
+				reason="False positive: bug in diff tool" />
+			<Member
+				fullName="System.Collections.Generic.IReadOnlyList`1&lt;Windows.UI.Xaml.Controls.Primitives.Popup&gt; Windows.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(Windows.UI.Xaml.XamlRoot xamlRoot)"
+				reason="False positive: bug in diff tool" />
+			<Member
+				fullName="System.Void Windows.Globalization.ApplicationLanguages..ctor()"
+				reason="Constructor not public in UWP" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.XamlRoot..ctor()"
+				reason="Constructor not public in UWP" />
+			<Member
+				fullName="Windows.UI.Xaml.Controls.Primitives.FlyoutPlacementMode Windows.UI.Xaml.Controls.DatePicker.get_FlyoutPlacement()"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.DatePicker.set_FlyoutPlacement(Windows.UI.Xaml.Controls.Primitives.FlyoutPlacementMode value)"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.DatePickerFlyout.OnDateChanged(System.DateTimeOffset oldDate, System.DateTimeOffset newDate)"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.DatePickerFlyout.OnMaxYearChanged(System.DateTimeOffset oldMaxYear, System.DateTimeOffset newMaxYear)"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.DatePickerFlyout.OnMinYearChanged(System.DateTimeOffset oldMinYear, System.DateTimeOffset newMinYear)"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.Primitives.LoopingSelector..ctor()"
+				reason="Constructor not public in UWP" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.Primitives.LoopingSelectorItem..ctor()"
+				reason="Constructor not public in UWP" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.Primitives.LoopingSelectorPanel..ctor()"
+				reason="Constructor not public in UWP" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Automation.Peers.LoopingSelectorAutomationPeer..ctor()"
+				reason="Constructor not public in UWP" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Automation.Peers.LoopingSelectorItemAutomationPeer..ctor()"
+				reason="Constructor not public in UWP" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Automation.Peers.LoopingSelectorItemDataAutomationPeer..ctor()"
+				reason="Constructor not public in UWP" />
+			<Member
+				fullName="Windows.Foundation.Rect Windows.UI.Xaml.Controls.ScrollContentPresenter.MakeVisible(Windows.UI.Xaml.UIElement visual, Windows.Foundation.Rect rectangle)"
+				reason="False positive" />
+			<Member
+				fullName="Windows.UI.Xaml.Controls.ScrollBarVisibility Windows.UI.Xaml.Controls.ScrollContentPresenter.get_VerticalScrollBarVisibility()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.ScrollContentPresenter.set_VerticalScrollBarVisibility(Windows.UI.Xaml.Controls.ScrollBarVisibility value)"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="Windows.UI.Xaml.Controls.ScrollBarVisibility Windows.UI.Xaml.Controls.ScrollContentPresenter.get_HorizontalScrollBarVisibility()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.ScrollContentPresenter.set_HorizontalScrollBarVisibility(Windows.UI.Xaml.Controls.ScrollBarVisibility value)"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Single Windows.UI.Xaml.Controls.ScrollContentPresenter.get_MinimumZoomScale()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.ScrollContentPresenter.set_MinimumZoomScale(System.Single value)"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Single Windows.UI.Xaml.Controls.ScrollContentPresenter.get_MaximumZoomScale()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.ScrollContentPresenter.set_MaximumZoomScale(System.Single value)"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="Windows.UI.Xaml.Controls.ScrollMode Windows.UI.Xaml.Controls.ScrollContentPresenter.get_HorizontalScrollMode()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.ScrollContentPresenter.set_HorizontalScrollMode(Windows.UI.Xaml.Controls.ScrollMode value)"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="Windows.UI.Xaml.Controls.ScrollMode Windows.UI.Xaml.Controls.ScrollContentPresenter.get_VerticalScrollMode()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.ScrollContentPresenter.set_VerticalScrollMode(Windows.UI.Xaml.Controls.ScrollMode value)"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.Security.Authentication.Web.WebAuthenticationBroker..ctor()"
+				reason="Not part of the UWP API - and it's a static class" />
+			<Member
+				fullName="System.Void Windows.Security.Authentication.Web.WebAuthenticationResult..ctor()"
+				reason="Not part of the UWP API" />
 		</Methods>
+		<Fields>
+			<Member
+				fullName="System.String Windows.UI.Xaml.Controls.DatePicker::DayTextBlockPartName"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="System.String Windows.UI.Xaml.Controls.DatePicker::MonthTextBlockPartName"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="System.String Windows.UI.Xaml.Controls.DatePicker::YearTextBlockPartName"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="System.String Windows.UI.Xaml.Controls.DatePicker::FlyoutButtonGridPartName"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="System.String Windows.UI.Xaml.Controls.DatePicker::DayColumnPartName"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="System.String Windows.UI.Xaml.Controls.DatePicker::MonthColumnPartName"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="System.String Windows.UI.Xaml.Controls.DatePicker::YearColumnPartName"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="System.String Windows.UI.Xaml.Controls.DatePicker::FlyoutButtonPartName"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="System.String Windows.UI.Xaml.Controls.DatePickerFlyout::AcceptButtonPartName"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="System.String Windows.UI.Xaml.Controls.DatePickerFlyout::DismissButtonPartName"
+				reason="Method not in UWP contract" />
+        </Fields>
+		<Properties>
+			<Member
+				fullName="Windows.UI.Xaml.Controls.Primitives.FlyoutPlacementMode Windows.UI.Xaml.Controls.DatePicker::FlyoutPlacement()"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="Windows.UI.Xaml.Controls.ScrollBarVisibility Windows.UI.Xaml.Controls.ScrollContentPresenter::VerticalScrollBarVisibility()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="Windows.UI.Xaml.Controls.ScrollBarVisibility Windows.UI.Xaml.Controls.ScrollContentPresenter::HorizontalScrollBarVisibility()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Single Windows.UI.Xaml.Controls.ScrollContentPresenter::MinimumZoomScale()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Single Windows.UI.Xaml.Controls.ScrollContentPresenter::MaximumZoomScale()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="Windows.UI.Xaml.Controls.ScrollMode Windows.UI.Xaml.Controls.ScrollContentPresenter::HorizontalScrollMode()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="Windows.UI.Xaml.Controls.ScrollMode Windows.UI.Xaml.Controls.ScrollContentPresenter::VerticalScrollMode()"
+				reason="Not part of the UWP API" />
+		</Properties>
 	</IgnoreSet>
+	<IgnoreSet baseVersion="3.6.6">
+		<Types>
+		</Types>
+		<Methods>
+			<Member
+				fullName="System.Void Windows.UI.Xaml.DependencyObjectStore.SetResourceBinding(Windows.UI.Xaml.DependencyProperty dependencyProperty, System.Object resourceKey, System.Boolean isTheme, System.Object context)"
+				reason="No longer used method that shouldn't be called from user code" />
+			<Member
+				fullName="System.Void Windows.ApplicationModel.Contacts.ContactBatch..ctor()"
+				reason="Method not in UWP contract" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.SwipeItemInvokedEventArgs..ctor()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.SwipeItems.set_Count(System.Int32 value)"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.SwipeItems.set_IsReadOnly(System.Boolean value)"
+				reason="Not part of the UWP API" />
+		</Methods>
+		<Fields>
+		</Fields>
+		<Properties>
+		</Properties>
+	</IgnoreSet>
+	<IgnoreSet baseVersion="3.7.7">
+		<Types>
+			<Member
+				fullName="Windows.UI.Xaml.UIElementExtensions"
+				reason="Not part of the WinUI API, was previously incorrectly included for Android/iOS/macOS." />
+		</Types>
+		<Methods>
+			<Member
+				fullName="System.Void Windows.UI.Xaml.FrameworkElement.Dispose()"
+				reason="Not part of the UWP API + false positive, it's not something changed in the source" />
+			<Member
+				fullName="System.Void Windows.UI.Core.WindowSizeChangedEventArgs..ctor(Windows.Foundation.Size newSize)"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.ApplicationModel.EnteredBackgroundEventArgs..ctor()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.ApplicationModel.LeavingBackgroundEventArgs..ctor()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.CalendarViewDayItemChangingEventArgs..ctor()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.CalendarViewSelectedDatesChangedEventArgs..ctor()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Automation.Provider.IRawElementProviderSimple..ctor()"
+				reason="Not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.FrameworkElement.OnIsEnabledChanged(System.Boolean oldValue, System.Boolean newValue)"
+				reason="Internal method which is not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.Picker.OnIsEnabledChanged(System.Boolean oldValue, System.Boolean newValue)"
+				reason="Internal method which is not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.NativeListViewBase.OnIsEnabledChanged(System.Boolean oldValue, System.Boolean newValue)"
+				reason="Internal method which is not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.NativePagedView.OnIsEnabledChanged(System.Boolean oldValue, System.Boolean newValue)"
+				reason="Internal method which is not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.MultilineTextBoxView.OnIsEnabledChanged(System.Boolean oldValue, System.Boolean newValue)"
+				reason="Internal method which is not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.SinglelineTextBoxView.OnIsEnabledChanged(System.Boolean oldValue, System.Boolean newValue)"
+				reason="Internal method which is not part of the UWP API" />
+			<Member
+				fullName="System.Void Windows.UI.Xaml.Controls.SecureTextBoxView.OnIsEnabledChanged(System.Boolean oldValue, System.Boolean newValue)"
+				reason="Internal method which is not part of the UWP API" />
+			<Member
+				fullName="System.Void Uno.UI.Controls.Legacy.ListViewBase.OnIsEnabledChanged(System.Boolean oldValue, System.Boolean newValue)"
+				reason="Internal method which is not part of the UWP API" />
+			<Member
+				fullName="System.Void Uno.UI.Controls.Legacy.ListView.OnIsEnabledChanged(System.Boolean oldValue, System.Boolean newValue)"
+				reason="Internal method which is not part of the UWP API" />
+			<Member
+				fullName="System.Void Uno.UI.Controls.Legacy.GridView.OnIsEnabledChanged(System.Boolean oldValue, System.Boolean newValue)"
+				reason="Internal method which is not part of the UWP API" />
+			<Member
+				fullName="System.Void Uno.UI.Controls.Legacy.HorizontalListView.OnIsEnabledChanged(System.Boolean oldValue, System.Boolean newValue)"
+				reason="Internal method which is not part of the UWP API" />
+			<Member
+				fullName="System.Void Uno.UI.Controls.Legacy.HorizontalGridView.OnIsEnabledChanged(System.Boolean oldValue, System.Boolean newValue)"
+				reason="Internal method which is not part of the UWP API" />
+			
+			<Member
+				fullName="System.Boolean Windows.UI.Xaml.UIElement.DispatchEvent(System.Int32 handle, System.String eventName, System.String eventArgs)"
+				reason="Public only for marshaling purposes, need to change return value" />
+		</Methods>
+		<Fields>
+			<Member
+				fullName="Windows.UI.Xaml.DependencyProperty Microsoft.UI.Xaml.Controls.XamlControlsResources::UseCompactResourcesProperty"
+				reason="This should be a property, not a field" />
+			<Member
+				fullName="System.Int32 Windows.UI.Xaml.Automation.Peers.PatternInterface::value__"
+				reason="This enum is an uint in UWP, not an int" />
+		</Fields>
+		<Properties>
+		</Properties>
+	</IgnoreSet>	
+	
 	<!--
 	Supported nodes (please keep at the bottom of this file):
 		<Types>

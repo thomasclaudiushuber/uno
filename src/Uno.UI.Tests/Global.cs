@@ -16,17 +16,18 @@ namespace Uno.UI.Tests
 			Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 			Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
-#if DEBUG
-			Uno.Extensions.LogExtensionPoint
-				.AmbientLoggerFactory
-				.AddConsole(LogLevel.Information)
-				.AddDebug(LogLevel.Information);
+			var factory = LoggerFactory.Create(builder =>
+			{
+#if false // DEBUG // debug logging is generally very verbose and slows down testing. Enable when needed.
+				var logLevel = LogLevel.Debug;
 #else
-			Uno.Extensions.LogExtensionPoint
-				.AmbientLoggerFactory
-				.AddConsole(LogLevel.Warning)
-				.AddDebug(LogLevel.Warning);
+				var logLevel = LogLevel.Information;
 #endif
+				builder.SetMinimumLevel(logLevel);
+				builder.AddConsole(o => o.LogToStandardErrorThreshold = logLevel);
+			});
+
+			Uno.Extensions.LogExtensionPoint.AmbientLoggerFactory = factory;
 		}
 	}
 }

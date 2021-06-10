@@ -29,6 +29,17 @@ namespace Windows.UI.Input
 			Properties = properties;
 		}
 
+		internal PointerPoint At(Point position)
+			=> new PointerPoint(
+				FrameId,
+				Timestamp,
+				PointerDevice,
+				PointerId,
+				RawPosition,
+				position: position,
+				IsInContact,
+				Properties);
+
 		public uint FrameId { get; }
 
 		public ulong Timestamp { get; }
@@ -44,5 +55,9 @@ namespace Windows.UI.Input
 		public bool IsInContact { get; }
 
 		public PointerPointProperties Properties { get; }
+
+		/// <inheritdoc />
+		public override string ToString()
+			=> $"[{PointerDevice.PointerDeviceType}-{PointerId}] @{Position.ToDebugString()} (raw: {RawPosition.ToDebugString()} | ts: {Timestamp} | props: {Properties} | inContact: {IsInContact})";
 	}
 }

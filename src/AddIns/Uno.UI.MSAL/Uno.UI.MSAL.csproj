@@ -35,24 +35,11 @@
 		<None Include="..\..\Common\uno.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-		<EmbeddedResource Include="WasmScripts\**\*.js" />
-		<UpToDateCheckInput Remove="WasmScripts\*.js" />
-		<UpToDateCheckInput Include="ts\**\*" />
-	</ItemGroup>
-
 	<ItemGroup>
 		<Content Include="buildTransitive/*">
 			<Pack>true</Pack>
 			<PackagePath>buildTransitive</PackagePath>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-		<PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.9.2">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -138,5 +125,8 @@
 			<UndefineProperties>TargetFramework</UndefineProperties>
 		</ProjectReference>
 	</ItemGroup>
+
+	<!-- Workaround for missing target running on .NET 5 -->
+	<Target Name="GetTargetPath" />
 
 </Project>

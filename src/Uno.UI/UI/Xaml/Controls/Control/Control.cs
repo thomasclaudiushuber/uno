@@ -12,6 +12,7 @@ using Windows.UI.Text;
 using Windows.UI.Xaml.Markup;
 using System.ComponentModel;
 using System.Reflection;
+using Windows.System;
 using Windows.UI.Core;
 using Uno.UI.Xaml;
 #if XAMARIN_ANDROID
@@ -31,7 +32,7 @@ using ViewGroup = AppKit.NSView;
 using Color = AppKit.NSColor;
 using Font = AppKit.NSFont;
 using AppKit;
-#elif NETSTANDARD2_0 || NET461
+#elif UNO_REFERENCE_API || NET461
 using View = Windows.UI.Xaml.UIElement;
 #endif
 
@@ -140,6 +141,11 @@ namespace Windows.UI.Xaml.Controls
 			get { return _templatedRoot; }
 			set
 			{
+				if (_templatedRoot == value)
+				{
+					return;
+				}
+
 				CleanupView(_templatedRoot);
 
 				UnregisterSubView();
@@ -541,7 +547,7 @@ namespace Windows.UI.Xaml.Controls
 				typeof(double),
 				typeof(Control),
 				new FrameworkPropertyMetadata(
-					15.0,
+					14.0,
 					FrameworkPropertyMetadataOptions.Inherits,
 					(s, e) => ((Control)s)?.OnFontSizeChanged((double)e.OldValue, (double)e.NewValue)
 				)
@@ -730,9 +736,9 @@ namespace Windows.UI.Xaml.Controls
 		{
 		}
 
-		protected override void OnIsEnabledChanged(bool oldValue, bool newValue)
+		private protected override void OnIsEnabledChanged(IsEnabledChangedEventArgs e)
 		{
-			base.OnIsEnabledChanged(oldValue, newValue);
+			base.OnIsEnabledChanged(e);
 			OnIsFocusableChanged();
 		}
 
@@ -850,6 +856,8 @@ namespace Windows.UI.Xaml.Controls
 		protected virtual void OnTapped(TappedRoutedEventArgs e) { }
 		protected virtual void OnDoubleTapped(DoubleTappedRoutedEventArgs e) { }
 		protected virtual void OnRightTapped(RightTappedRoutedEventArgs e) { }
+		[NotImplemented] // For WinUI code compatibility, not implemented yet
+		private protected virtual void OnRightTappedUnhandled(RightTappedRoutedEventArgs e) { }
 		protected virtual void OnHolding(HoldingRoutedEventArgs e) { }
 		protected virtual void OnDragEnter(global::Windows.UI.Xaml.DragEventArgs e) { }
 		protected virtual void OnDragOver(global::Windows.UI.Xaml.DragEventArgs e) { }
@@ -1126,6 +1134,12 @@ namespace Windows.UI.Xaml.Controls
 
 		private protected bool GoToState(bool useTransitions, string stateName) => VisualStateManager.GoToState(this, stateName, useTransitions);
 
+		// This is a method to support code from WinUI
+		private protected void GoToState(bool useTransitions, string stateName, out bool b)
+		{
+			b = VisualStateManager.GoToState(this, stateName, useTransitions);
+		}
+
 #if DEBUG
 #if !__IOS__
 		public VisualStateGroup[] VisualStateGroups => VisualStateManager.GetVisualStateGroups(GetTemplateRoot()).ToArray();
@@ -1135,5 +1149,29 @@ namespace Windows.UI.Xaml.Controls
 
 		public string[] CurrentVisualStates => VisualStateGroups.Select(vsg => vsg.CurrentState?.Name).ToArray();
 #endif
+
+		// This is a method to support code from WinUI
+		internal void ConditionallyGetTemplatePartAndUpdateVisibility<T>(
+			string strName,
+			bool visible,
+			ref T element) where T:UIElement
+        {
+            if (element == null && (visible /*|| !DXamlCore::GetCurrent()->GetHandle()->GetDeferredElementIfExists(strName, GetHandle(), Jupiter::NameScoping::NameScopeType::TemplateNameScope))*/))
+            {
+                // If element should be visible or is not deferred, then fetch it.
+				element = GetTemplateChild(strName) as T;
+			}
+
+            // If element was found then set its Visibility - this is behavior consistent with pre-Threshold releases.
+            if (element != null)
+            {
+                var spElementAsUIE = element as UIElement;
+
+                if (spElementAsUIE != null) 
+                {
+                    spElementAsUIE.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+                }
+            }
+        }
 	}
 }

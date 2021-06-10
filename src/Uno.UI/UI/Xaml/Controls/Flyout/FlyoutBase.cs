@@ -7,6 +7,7 @@ using Uno.Disposables;
 using Uno.Extensions;
 using Uno.UI;
 using Windows.Foundation;
+using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Media;
 
@@ -36,7 +37,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 		private Point? _popupPositionInTarget;
 		private readonly SerialDisposable _sizeChangedDisposable = new SerialDisposable();
 
-		public FlyoutBase()
+		protected FlyoutBase()
 		{
 		}
 
@@ -46,9 +47,10 @@ namespace Windows.UI.Xaml.Controls.Primitives
 			{
 				ResourceResolver.ApplyResource(this, LightDismissOverlayBackgroundProperty, "FlyoutLightDismissOverlayBackground", isThemeResourceExtension: true);
 
+				var child = CreatePresenter();
 				_popup = new Windows.UI.Xaml.Controls.Popup()
 				{
-					Child = CreatePresenter(),
+					Child = child,
 					IsLightDismissEnabled = _isLightDismissEnabled,
 				};
 
@@ -240,8 +242,20 @@ namespace Windows.UI.Xaml.Controls.Primitives
 			Opening?.Invoke(this, EventArgs.Empty);
 			Open();
 			_isOpen = true;
-			OnOpened();
-			Opened?.Invoke(this, EventArgs.Empty);
+
+			// **************************************************************************************
+			// UNO-FIX: Defer the raising of the Opened event to ensure everything is well
+			// initialized before opening it.
+			// **************************************************************************************
+			Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+			// **************************************************************************************
+			{
+				if (_isOpen)
+				{
+					OnOpened();
+					Opened?.Invoke(this, EventArgs.Empty);
+				}
+			});
 		}
 
 		private protected virtual void OnOpening() { }
@@ -252,10 +266,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 
 		private protected virtual void OnOpened() { }
 
-		protected virtual Control CreatePresenter()
-		{
-			return null;
-		}
+		protected virtual Control CreatePresenter() => null;
 
 		private void OnPopupClosed(object sender, object e)
 		{
@@ -273,6 +284,8 @@ namespace Windows.UI.Xaml.Controls.Primitives
 
 		protected internal virtual void Open()
 		{
+			EnsurePopupCreated();
+
 			SetPopupPositionPartial(Target, _popupPositionInTarget);
 
 			_popup.IsOpen = true;

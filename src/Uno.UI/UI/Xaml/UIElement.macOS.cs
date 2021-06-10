@@ -105,10 +105,6 @@ namespace Windows.UI.Xaml
 #endif
 		}
 
-#if DEBUG
-		public string ShowLocalVisualTree(int fromHeight) => AppKit.UIViewExtensions.ShowLocalVisualTree(this, fromHeight);
-#endif
-
 		/// <inheritdoc />
 		public override bool AcceptsFirstResponder()
 			=> true; // This is required to receive the KeyDown / KeyUp. Note: Key events are then bubble in managed.
@@ -127,7 +123,7 @@ namespace Windows.UI.Xaml
 
 		private bool TryGetParentUIElementForTransformToVisual(out UIElement parentElement, ref double offsetX, ref double offsetY)
 		{
-			var parent = this.GetParent();
+			var parent = this.GetVisualTreeParent();
 			switch (parent)
 			{
 				// First we try the direct parent, if it's from the known type we won't even have to adjust offsets
@@ -143,32 +139,13 @@ namespace Windows.UI.Xaml
 				case NSView view:
 					do
 					{
-						//If we found an NSClipView, we are assuming that we are inside of an NSScrollView.
-						//So "skip" past the NSClipView and allow the logic to flow through to the check for NativeScrollContentPresenter
-						if (view is NSClipView && view.Superview is NativeScrollContentPresenter)
-						{
-							parent = view.Superview?.GetParent();
-							view = view.Superview;
-						}
-						else
-						{
-							parent = parent?.GetParent();
-						}
+						parent = parent?.GetVisualTreeParent();
 
 						switch (parent)
 						{
 							case UIElement eltParent:
 								// We found a UIElement in the parent hierarchy, we compute the X/Y offset between the
 								// first parent 'view' and this 'elt', and return it.
-
-								if (view is NativeScrollContentPresenter)
-								{
-									// The NativeScrollContentPresenter will include the scroll offset when converting point to coordinates
-									// space of the parent, but the same scroll offset will be applied by the parent ScrollViewer.
-									// So as it's not expected to have any transform/margins/etc., we compute offset directly from its parent.
-
-									view = view.Superview;
-								}
 
 								var offset = view?.ConvertPointToView(default, eltParent) ?? default;
 
@@ -189,12 +166,6 @@ namespace Windows.UI.Xaml
 								return false;
 						}
 					} while (true);
-
-				default:
-					Application.Current.RaiseRecoverableUnhandledException(new InvalidOperationException("Found a parent which is NOT a NSView."));
-
-					parentElement = null;
-					return false;
 			}
 		}
 

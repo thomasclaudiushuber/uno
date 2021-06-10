@@ -16,7 +16,7 @@ using Query = System.Func<Uno.UITest.IAppQuery, Uno.UITest.IAppQuery>;
 
 namespace SamplesApp.UITests.Microsoft_UI_Xaml_Controls.NumberBoxTests
 {
-	public class Given_RadioButtons : SampleControlUITestBase
+	public partial class Given_RadioButtons : SampleControlUITestBase
 	{
 		[Test]
 		[AutoRetry]
@@ -41,6 +41,17 @@ namespace SamplesApp.UITests.Microsoft_UI_Xaml_Controls.NumberBoxTests
 				Assert.IsTrue(item3.GetDependencyPropertyValue<string>("IsChecked") == "True");
 				Assert.IsFalse(item1.GetDependencyPropertyValue<string>("IsChecked") == "True");
 			}
+		}
+
+		[Test]
+		[AutoRetry]
+		public void SelectionOnLoad()
+		{
+			Run("UITests.Microsoft_UI_Xaml_Controls.RadioButtonsTests.RadioButtonsInitialLoadSelected");
+
+			var rad = QueryAll("LightThemeRadio");
+
+			Assert.IsTrue(rad.GetDependencyPropertyValue<string>("IsChecked") == "True");
 		}
 
 		private void SelectByItem(int v)

@@ -1,4 +1,5 @@
-﻿using Uno.Extensions;
+﻿#if !UNO_HAS_MANAGED_SCROLL_PRESENTER
+using Uno.Extensions;
 using Uno.Logging;
 using Uno.UI.DataBinding;
 using Windows.UI.Xaml.Data;
@@ -28,15 +29,27 @@ namespace Windows.UI.Xaml.Controls
 	{
 		private View _content;
 
-		public View Content
+		public bool CanHorizontallyScroll
+		{
+			get => HorizontalScrollBarVisibility != ScrollBarVisibility.Disabled;
+			set { }
+		}
+
+		public bool CanVerticallyScroll
+		{
+			get => VerticalScrollBarVisibility != ScrollBarVisibility.Disabled;
+			set { }
+		}
+
+		public object Content
 		{
 			get { return _content; }
 			set
 			{
 				var previousView = _content;
-				_content = value;
+				_content = value as View;
 
-				OnContentChanged(previousView, value);
+				OnContentChanged(previousView, value as View);
 			}
 		}
 
@@ -53,3 +66,4 @@ namespace Windows.UI.Xaml.Controls
 		}
 	}
 }
+#endif

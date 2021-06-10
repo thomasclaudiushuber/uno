@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +10,7 @@ namespace Uno.UI.SourceGenerators.XamlGenerator
 {
 	internal class NameScope
 	{
-		public NameScope(string @namespace, string className)
+		public NameScope(string? @namespace, string className)
 		{
 			Namespace = @namespace ?? string.Empty;
 			ClassName = className;
@@ -19,6 +21,11 @@ namespace Uno.UI.SourceGenerators.XamlGenerator
 		public string ClassName { get; private set; }
 
 		public List<BackingFieldDefinition> BackingFields { get; } = new List<BackingFieldDefinition>();
+
+		/// <summary>
+		/// List of action handlers for registering x:Bind events
+		/// </summary>
+		public List<BackingFieldDefinition> xBindEventsHandlers { get; } = new List<BackingFieldDefinition>();
 
 		/// <summary>
 		/// Lists the ElementStub builder holder variables used to pin references for implicit pinning platforms

@@ -91,17 +91,27 @@ namespace Windows.UI.Xaml.Shapes
 
 			var heightOffset = ((float)borderThickness.Top / 2) + ((float)borderThickness.Bottom / 2);
 			var widthOffset = ((float)borderThickness.Left / 2) + ((float)borderThickness.Right / 2);
+			var halfWidth = (float)area.Width / 2;
+			var halfHeight = (float)area.Height / 2;
 			var adjustedArea = area;
 			adjustedArea = adjustedArea.DeflateBy(borderThickness);
 
 			if (cornerRadius != CornerRadius.None)
 			{
-				var maxRadius = Math.Max(0, Math.Min((float)area.Width / 2 - heightOffset, (float)area.Height / 2 - widthOffset));
+				var maxOuterRadius = Math.Max(0, Math.Min(halfWidth - widthOffset, halfHeight - heightOffset));
+				var maxInnerRadius = Math.Max(0, Math.Min(halfWidth, halfHeight));
+
 				cornerRadius = new CornerRadius(
-					Math.Min(cornerRadius.TopLeft, maxRadius),
-					Math.Min(cornerRadius.TopRight, maxRadius),
-					Math.Min(cornerRadius.BottomRight, maxRadius),
-					Math.Min(cornerRadius.BottomLeft, maxRadius));
+					Math.Min(cornerRadius.TopLeft, maxOuterRadius),
+					Math.Min(cornerRadius.TopRight, maxOuterRadius),
+					Math.Min(cornerRadius.BottomRight, maxOuterRadius),
+					Math.Min(cornerRadius.BottomLeft, maxOuterRadius));
+
+				var innerCornerRadius = new CornerRadius(
+					Math.Min(cornerRadius.TopLeft, maxInnerRadius),
+					Math.Min(cornerRadius.TopRight, maxInnerRadius),
+					Math.Min(cornerRadius.BottomRight, maxInnerRadius),
+					Math.Min(cornerRadius.BottomLeft, maxInnerRadius));
 
 				var borderShape = compositor.CreateSpriteShape();
 				var backgroundShape = compositor.CreateSpriteShape();
@@ -138,12 +148,17 @@ namespace Windows.UI.Xaml.Shapes
 					Brush.AssignAndObserveBrush(acrylicBrush, color => backgroundShape.FillBrush = compositor.CreateColorBrush(color))
 						.DisposeWith(disposables);
 				}
+				else if (background is XamlCompositionBrushBase unsupportedCompositionBrush)
+				{
+					Brush.AssignAndObserveBrush(unsupportedCompositionBrush, color => backgroundShape.FillBrush = compositor.CreateColorBrush(color))
+						.DisposeWith(disposables);
+				}
 				else
 				{
 					backgroundShape.FillBrush = null;
 				}
 
-				var borderPath = GetRoundedRect(cornerRadius, area, adjustedArea);
+				var borderPath = GetRoundedRect(cornerRadius, innerCornerRadius, area, adjustedArea);
 				var backgroundPath = GetRoundedPath(cornerRadius, adjustedArea);
 				var outerPath = GetRoundedPath(cornerRadius, area);
 
@@ -210,6 +225,16 @@ namespace Windows.UI.Xaml.Shapes
 					Disposable.Create(() => backgroundShape.FillBrush = null)
 						.DisposeWith(disposables);
 				}
+				else if (background is XamlCompositionBrushBase unsupportedCompositionBrush)
+				{
+					Brush.AssignAndObserveBrush(unsupportedCompositionBrush, c => backgroundShape.FillBrush = compositor.CreateColorBrush(c))
+						.DisposeWith(disposables);
+
+					// This is required because changing the CornerRadius changes the background drawing 
+					// implementation and we don't want a rectangular background behind a rounded background.
+					Disposable.Create(() => backgroundShape.FillBrush = null)
+						.DisposeWith(disposables);
+				}
 				else
 				{
 					backgroundShape.FillBrush = null;
@@ -238,10 +263,6 @@ namespace Windows.UI.Xaml.Shapes
 						spriteShape.Geometry = compositor.CreatePathGeometry(new CompositionPath(geometry));
 
 						shapeVisual.Shapes.Add(spriteShape);
-
-						// Must be inserted below the other subviews, which may happen when
-						// the current view has subviews.
-						sublayers.Add(shapeVisual);
 					};
 
 					if (borderThickness.Top != 0)
@@ -292,7 +313,11 @@ namespace Windows.UI.Xaml.Shapes
 						});
 					}
 				}
+				
+				sublayers.Add(shapeVisual);
 
+				// Must be inserted below the other subviews, which may happen when
+				// the current view has subviews.
 				parent.Children.InsertAtBottom(shapeVisual);
 			}
 
@@ -332,6 +357,12 @@ namespace Windows.UI.Xaml.Shapes
 					// surfaceBrush.Offset = new Vector2((float)imageFrame.Left, (float)imageFrame.Top);
 					var matrix = Matrix3x2.CreateScale((float)(backgroundArea.Width / sourceImageSize.Width), (float)(backgroundArea.Height / sourceImageSize.Height));
 					matrix *= Matrix3x2.CreateTranslation((float)backgroundArea.Left, (float)backgroundArea.Top);
+
+					if (imgBackground.Transform != null)
+					{
+						matrix *= imgBackground.Transform.ToMatrix(new Point());
+					}
+
 					surfaceBrush.TransformMatrix = matrix;
 
 					backgroundShape.FillBrush = surfaceBrush;
@@ -366,12 +397,12 @@ namespace Windows.UI.Xaml.Shapes
 			return new CompositionPath(geometrySource);
 		}
 
-		private static CompositionPath GetRoundedRect(CornerRadius cornerRadius, Rect area, Rect insetArea)
+		private static CompositionPath GetRoundedRect(CornerRadius cornerRadius, CornerRadius innerCornerRadius, Rect area, Rect insetArea)
 		{
 			var geometrySource = new SkiaGeometrySource2D();
 
 			GetRoundedPath(cornerRadius, area, geometrySource);
-			GetRoundedPath(cornerRadius, insetArea, geometrySource);
+			GetRoundedPath(innerCornerRadius, insetArea, geometrySource);
 			geometrySource.Geometry.FillType = SKPathFillType.EvenOdd;
 			return new CompositionPath(geometrySource);
 		}

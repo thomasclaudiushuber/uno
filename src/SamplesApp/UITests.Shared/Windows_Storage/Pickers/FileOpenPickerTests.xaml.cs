@@ -1,17 +1,20 @@
 ﻿using System;
-using Windows.UI.Xaml.Controls;
-using Uno.UI.Samples.Controls;
-using Windows.Storage.Pickers;
-using Uno.UI.Samples.UITests.Helpers;
-using Windows.UI.Core;
-using Windows.Storage;
-using System.Linq;
 using System.Collections.ObjectModel;
+using System.Linq;
+using Uno;
+using Uno.Disposables;
 using Uno.Extensions;
+using Uno.UI.Samples.Controls;
+using Uno.UI.Samples.UITests.Helpers;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.UI.Core;
+using Windows.UI.Xaml.Controls;
 
 namespace UITests.Shared.Windows_Storage.Pickers
 {
-	[Sample("Windows.Storage", ViewModelType = typeof(FileOpenPickerTestsViewModel))]
+	[Sample("Windows.Storage", ViewModelType = typeof(FileOpenPickerTestsViewModel), IsManualTest = true,
+		Description = "Allows testing all features of FileOpenPicker. Currently not supported on Android, iOS, macOS and GTK. Not selecting a file should not cause an exception")]
 	public sealed partial class FileOpenPickerTests : Page
 	{
 		public FileOpenPickerTests()
@@ -25,7 +28,7 @@ namespace UITests.Shared.Windows_Storage.Pickers
 			ViewModel = args.NewValue as FileOpenPickerTestsViewModel;
 		}
 
-		public FileOpenPickerTestsViewModel ViewModel { get; private set; }		
+		public FileOpenPickerTestsViewModel ViewModel { get; private set; }
 	}
 
 	public class FileOpenPickerTestsViewModel : ViewModelBase
@@ -38,6 +41,13 @@ namespace UITests.Shared.Windows_Storage.Pickers
 
 		public FileOpenPickerTestsViewModel(CoreDispatcher dispatcher) : base(dispatcher)
 		{
+#if __WASM__
+			WinRTFeatureConfiguration.Storage.Pickers.WasmConfiguration = WasmPickerConfiguration.FileSystemAccessApi;
+			Disposables.Add(Disposable.Create(() =>
+			{
+				WinRTFeatureConfiguration.Storage.Pickers.WasmConfiguration = WasmPickerConfiguration.FileSystemAccessApiWithFallback;
+			}));
+#endif
 		}
 
 		public PickerLocationId[] SuggestedStartLocations { get; } = Enum.GetValues(typeof(PickerLocationId)).OfType<PickerLocationId>().ToArray();
@@ -62,7 +72,7 @@ namespace UITests.Shared.Windows_Storage.Pickers
 			}
 		}
 
-		public ObservableCollection<string> FileTypeFilter { get; } = new ObservableCollection<string>();
+		public ObservableCollection<string> FileTypeFilter { get; } = new ObservableCollection<string>() { "*" };
 
 		public string ErrorMessage
 		{
@@ -73,6 +83,25 @@ namespace UITests.Shared.Windows_Storage.Pickers
 				RaisePropertyChanged();
 			}
 		}
+
+#if __WASM__
+		public bool UseNativePicker
+		{
+			get => WinRTFeatureConfiguration.Storage.Pickers.WasmConfiguration == WasmPickerConfiguration.FileSystemAccessApi;
+			set
+			{
+				var usesNativePicker = WinRTFeatureConfiguration.Storage.Pickers.WasmConfiguration == WasmPickerConfiguration.FileSystemAccessApi;
+				if (usesNativePicker != value)
+				{
+					WinRTFeatureConfiguration.Storage.Pickers.WasmConfiguration = value ?
+						WasmPickerConfiguration.FileSystemAccessApi :
+						WasmPickerConfiguration.DownloadUpload;
+
+					RaisePropertyChanged();
+				}
+			}
+		}
+#endif
 
 		public string StatusMessage
 		{

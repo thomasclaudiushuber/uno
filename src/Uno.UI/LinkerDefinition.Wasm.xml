@@ -15,7 +15,8 @@
 	</type>
 	<type fullname="Windows.UI.Xaml.Application">
 	  <method name="DispatchSuspending" />
-	  <method name="DispatchSystemThemeChange" />
+      <method name="DispatchSystemThemeChange" />
+      <method name="DispatchVisibilityChange" />
 	</type>
   </assembly>
 
@@ -61,6 +62,15 @@
 	<type fullname="Windows.Storage.StorageFolder">
 	  <method name="DispatchStorageInitialized" />
 	</type>
+    <type fullname="Uno.Storage.NativeStorageItem">
+      <method name="GenerateGuids" />
+    </type>
+
+    <type fullname="Uno.Storage.Internal.NativeStorageItemInfo" />
+    <type fullname="Uno.ApplicationModel.Contacts.Internal.WasmContact" />
+    <type fullname="Uno.ApplicationModel.Contacts.Internal.WasmContactAddress" />
+    <type fullname="Uno.Storage.Pickers.Internal.NativeFilePickerAcceptType" />
+    <type fullname="Uno.Storage.Pickers.Internal.NativeFilePickerAcceptTypeItem" />
   </assembly>
 
   <assembly fullname="Uno.Foundation">

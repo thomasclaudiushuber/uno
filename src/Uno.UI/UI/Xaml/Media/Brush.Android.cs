@@ -16,6 +16,8 @@ namespace Windows.UI.Xaml.Media
 	//Android partial for Brush
 	public partial class Brush
 	{
+		internal delegate void ColorSetterHandler(Android.Graphics.Color color);
+
 		/// <summary>
 		/// Return a paint with Fill style
 		/// </summary>
@@ -24,7 +26,7 @@ namespace Windows.UI.Xaml.Media
 		internal Paint GetFillPaint(Windows.Foundation.Rect destinationRect)
 		{
 			var paint = GetPaintInner(destinationRect);
-			paint.SetStyle(Paint.Style.Fill);
+			paint?.SetStyle(Paint.Style.Fill);
 			return paint;
 		}
 
@@ -36,13 +38,13 @@ namespace Windows.UI.Xaml.Media
 		internal Paint GetStrokePaint(Windows.Foundation.Rect destinationRect)
 		{
 			var paint = GetPaintInner(destinationRect);
-			paint.SetStyle(Paint.Style.Stroke);
+			paint?.SetStyle(Paint.Style.Stroke);
 			return paint;
 		}
 
 		protected virtual Paint GetPaintInner(Rect destinationRect) => throw new InvalidOperationException();
 
-		internal static IDisposable AssignAndObserveBrush(Brush b, Action<Android.Graphics.Color> colorSetter, Action imageBrushCallback = null)
+		internal static IDisposable AssignAndObserveBrush(Brush b, ColorSetterHandler colorSetter, Action imageBrushCallback = null)
 		{
 			if (b is SolidColorBrush colorBrush)
 			{
@@ -81,7 +83,7 @@ namespace Windows.UI.Xaml.Media
 			}
 			else if (b is ImageBrush imageBrush && imageBrushCallback != null)
 			{
-				var disposables = new CompositeDisposable(3);
+				var disposables = new CompositeDisposable(5);
 				imageBrush.RegisterDisposablePropertyChangedCallback(
 					ImageBrush.ImageSourceProperty,
 					(_, __) => imageBrushCallback()
@@ -89,6 +91,16 @@ namespace Windows.UI.Xaml.Media
 
 				imageBrush.RegisterDisposablePropertyChangedCallback(
 					ImageBrush.StretchProperty,
+					(_, __) => imageBrushCallback()
+				).DisposeWith(disposables);
+
+				imageBrush.RegisterDisposablePropertyChangedCallback(
+					ImageBrush.AlignmentXProperty,
+					(_, __) => imageBrushCallback()
+				).DisposeWith(disposables);
+
+				imageBrush.RegisterDisposablePropertyChangedCallback(
+					ImageBrush.AlignmentYProperty,
 					(_, __) => imageBrushCallback()
 				).DisposeWith(disposables);
 
@@ -113,6 +125,24 @@ namespace Windows.UI.Xaml.Media
 				acrylicBrush.RegisterDisposablePropertyChangedCallback(
 					AcrylicBrush.OpacityProperty,
 					(s, args) => colorSetter((s as AcrylicBrush).FallbackColorWithOpacity))
+					.DisposeWith(disposables);
+
+				return disposables;
+			}
+			else if (b is XamlCompositionBrushBase unsupportedCompositionBrush)
+			{
+				var disposables = new CompositeDisposable(2);
+
+				colorSetter(unsupportedCompositionBrush.FallbackColorWithOpacity);
+
+				unsupportedCompositionBrush.RegisterDisposablePropertyChangedCallback(
+					XamlCompositionBrushBase.FallbackColorProperty,
+					(s, args) => colorSetter((s as XamlCompositionBrushBase).FallbackColorWithOpacity))
+					.DisposeWith(disposables);
+
+				unsupportedCompositionBrush.RegisterDisposablePropertyChangedCallback(
+					OpacityProperty,
+					(s, args) => colorSetter((s as XamlCompositionBrushBase).FallbackColorWithOpacity))
 					.DisposeWith(disposables);
 
 				return disposables;

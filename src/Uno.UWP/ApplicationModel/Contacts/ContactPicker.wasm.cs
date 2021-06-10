@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Uno.ApplicationModel.Contacts.Internal;
 using Uno.Foundation;
+using Uno.Helpers.Serialization;
 
 namespace Windows.ApplicationModel.Contacts
 {
@@ -24,23 +25,14 @@ namespace Windows.ApplicationModel.Contacts
 
 		private async Task<Contact[]> PickContactsAsync(bool multiple, CancellationToken token)
 		{
-			var pickResult = await WebAssemblyRuntime.InvokeAsync($"{JsType}.pickContacts({(multiple ? "true" : "false")})");
-			if (string.IsNullOrEmpty(pickResult) || token.IsCancellationRequested)
+			var pickResultJson = await WebAssemblyRuntime.InvokeAsync($"{JsType}.pickContacts({(multiple ? "true" : "false")})");
+			if (string.IsNullOrEmpty(pickResultJson) || token.IsCancellationRequested)
 			{
 				return Array.Empty<Contact>();
 			}
 
-			var contacts = DeserializePickResult(pickResult);
+			var contacts = JsonHelper.Deserialize<WasmContact[]>(pickResultJson);
 			return contacts.Where(c => c != null).Select(c => ContactFromContactInfo(c)).ToArray();
-		}
-
-		private WasmContact[] DeserializePickResult(string pickResult)
-		{
-			using (var stream = new MemoryStream(Encoding.Default.GetBytes(pickResult)))
-			{
-				var serializer = new DataContractJsonSerializer(typeof(WasmContact[]));
-				return (WasmContact[])serializer.ReadObject(stream);
-			}
 		}
 
 		private static Contact ContactFromContactInfo(WasmContact contactInfo)

@@ -1,4 +1,4 @@
-# Getting Started on Visual Studio 
+# Get Started on Visual Studio 
 
 ## Prerequisites
 * [**Visual Studio 2019 16.3 or later**](https://visualstudio.microsoft.com/), with:
@@ -62,9 +62,10 @@ If XAML Intellisense isn't working on a freshly-created project, try the followi
 
 ### Troubleshooting Visual Studio and Uno Platform Installation Issues
 
-
 You may encounter  installation and/or post-installation Visual Studio issues for which workarounds exist. Please see [Common Issues](https://platform.uno/docs/articles/get-started-wizard.html) we have documented.
+
+If you're not sure whether your environment is correctly configured for Uno Platform development, running the [`uno-check` command-line tool](uno-check.md) should be your first step.
 
 ### Getting Help
 
-If you continue experiencing issues with Visual Studio and Uno Platform, please visit our [Discord](https://wwww.platform.uno/discord) - #uno-platform channel or [StackOverflow](https://stackoverflow.com/questions/tagged/uno-platform) where our engineering team and community will be able to help you. 
+If you continue experiencing issues with Visual Studio and Uno Platform, please visit our [Discord](https://www.platform.uno/discord) - #uno-platform channel or [StackOverflow](https://stackoverflow.com/questions/tagged/uno-platform) where our engineering team and community will be able to help you. 

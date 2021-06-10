@@ -5,6 +5,7 @@
       "AddIns\\Uno.UI.Lottie\\Uno.UI.Lottie.csproj",
       "AddIns\\Uno.UI.MSAL\\Uno.UI.MSAL.csproj",
       "SamplesApp\\SamplesApp.Droid\\SamplesApp.Droid.csproj",
+      "SamplesApp\\Benchmarks.Shared\\SamplesApp.Benchmarks.shproj",
       "SamplesApp\\SamplesApp.Shared\\SamplesApp.Shared.shproj",
       "SamplesApp\\SamplesApp.UITests.Generator\\Uno.Samples.UITest.Generator.csproj",
       "SamplesApp\\SamplesApp.UITests\\SamplesApp.UITests.csproj",
@@ -25,7 +26,9 @@
       "Uno.UI.RuntimeTests\\Uno.UI.RuntimeTests.csproj",
       "Uno.UI.Toolkit\\Uno.UI.Toolkit.csproj",
       "Uno.UI\\Uno.UI.csproj",
-      "Uno.UWP\\Uno.csproj"
+      "Uno.UWP\\Uno.csproj",
+      "Uno.UI.RemoteControl.Server.Processors\\Uno.UI.RemoteControl.Server.Processors.csproj",
+      "Uno.UI.RemoteControl.Server\\Uno.UI.RemoteControl.Server.csproj"
     ]
   }
 }

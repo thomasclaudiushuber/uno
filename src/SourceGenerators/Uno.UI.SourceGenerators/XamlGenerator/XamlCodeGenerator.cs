@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Mime;
@@ -21,22 +23,20 @@ namespace Uno.UI.SourceGenerators.XamlGenerator
 	{
 		public void Initialize(GeneratorInitializationContext context)
 		{
+			DependenciesInitializer.Init();
 		}
 
 		public void Execute(GeneratorExecutionContext context)
 		{
-			DependenciesInitializer.Init(context);
-
 			// No initialization required for this one
 			//if (!Process.GetCurrentProcess().ProcessName.Equals("devenv", StringComparison.OrdinalIgnoreCase))
 			//{
 			//	Debugger.Launch();
 			//}
 
-			var gen = new XamlCodeGeneration(context);
-
 			if (PlatformHelper.IsValidPlatform(context))
 			{
+				var gen = new XamlCodeGeneration(context);
 				var genereratedTrees = gen.Generate();
 
 				foreach (var tree in genereratedTrees)

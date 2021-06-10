@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Uno;
 using Uno.UI.Samples.Controls;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -11,13 +12,29 @@ using Windows.UI.Xaml.Controls;
 
 namespace UITests.Windows_Storage.Pickers
 {
-	[Sample("Windows.Storage")]
+	[Sample("Windows.Storage", IsManualTest = true, Description = "This sample is specifically suited for WASM, should trigger a download of a given file")]
     public sealed partial class DownloadFileSavePickerTests : Page
     {
         public DownloadFileSavePickerTests()
         {
             this.InitializeComponent();
+			this.Loaded += DownloadFileSavePickerTests_Loaded;
+			this.Unloaded += DownloadFileSavePickerTests_Unloaded;
         }
+
+		private void DownloadFileSavePickerTests_Unloaded(object sender, RoutedEventArgs e)
+		{
+#if __WASM__
+			WinRTFeatureConfiguration.Storage.Pickers.WasmConfiguration = WasmPickerConfiguration.FileSystemAccessApiWithFallback;
+#endif
+		}
+
+		private void DownloadFileSavePickerTests_Loaded(object sender, RoutedEventArgs e)
+		{
+#if __WASM__
+			WinRTFeatureConfiguration.Storage.Pickers.WasmConfiguration = WasmPickerConfiguration.DownloadUpload;
+#endif
+		}
 
 		private enum FileType
 		{

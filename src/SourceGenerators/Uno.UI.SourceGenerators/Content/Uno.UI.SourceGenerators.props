@@ -23,11 +23,6 @@
 	<When Condition="'$(UnoUIUseRoslynSourceGenerators)'=='true'">
 	  <!-- C# 9.0 Generator -->
 
-	  <ItemGroup>
-		<Analyzer Include="$(MSBuildThisFileDirectory)..\bin\$(Configuration)\netstandard2.0\Uno.UI.SourceGenerators.dll" Condition="exists('$(MSBuildThisFileDirectory)..\Uno.UI.SourceGenerators.csproj')"/>
-		<!-- generator is automatically included in nuget package, no need to add it here -->
-	  </ItemGroup>
-
 	 <PropertyGroup>
 	   <UnoUIUseRoslynSourceGeneratorsValue>$(UnoUIUseRoslynSourceGenerators)</UnoUIUseRoslynSourceGeneratorsValue>
 	 </PropertyGroup>
@@ -46,11 +41,13 @@
 		<CompilerVisibleProperty Include="MSBuildProjectName" />
 		<CompilerVisibleProperty Include="BuildingProject" />
 		<CompilerVisibleProperty Include="DesignTimeBuild" />
+		<CompilerVisibleProperty Include="UnoUISourceGeneratorDebuggerBreak" />
 
 		<CompilerVisibleProperty Include="UseWPF" />
 		<CompilerVisibleProperty Include="IsUnoHead" />
 		<CompilerVisibleProperty Include="UnoRemoteControlPort" />
 		<CompilerVisibleProperty Include="UnoRemoteControlHost" />
+		<CompilerVisibleProperty Include="UnoRemoteControlProcessorsPath" />
 		<CompilerVisibleProperty Include="TSBindingsPath" />
 		<CompilerVisibleProperty Include="UseUnoXamlParser" />
 		<CompilerVisibleProperty Include="UnoSkipUserControlsInVisualTree" />
@@ -83,6 +80,17 @@
 	  </ItemGroup>
 	</Otherwise>
   </Choose>
+
+  <Target Name="OverrideUnoSolutionTarget"
+		  BeforeTargets="CoreCompile"
+		  Condition="exists('$(MSBuildThisFileDirectory)..\Uno.UI.SourceGenerators.csproj')">
+
+	<ItemGroup >
+	  <Analyzer Include="$(MSBuildThisFileDirectory)..\bin\$(Configuration)\netstandard2.0\*.dll" />
+	  <AdditionalFiles Include="$(MSBuildThisFileDirectory)..\bin\$(Configuration)\netstandard2.0\*.dll"/>
+	  <!-- generator is automatically included in nuget package, no need to add it here -->
+	</ItemGroup>
+  </Target>
 
   <ItemGroup>
 
@@ -381,6 +389,18 @@
 	<Warning
 	  Condition="'$(registry:HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem@LongPathsEnabled)'!='1' and '$(UnoUIDisableLongPathWarning)'==''"
 	  Text="Windows LongPath support is not enabled, you may experience build errors. You can avoid these by enabling LongPath with &quot;reg ADD HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1&quot;, or disable this warning by setting UnoUIDisableLongPathWarning to true."/>
+  </Target>
+
+  <Target Name="_UnoUIValidateInvalidRoslynPath"
+		  BeforeTargets="CoreCompile"
+		  Condition="'$(UnoUIUseRoslynSourceGenerators)'=='true'">
+	<!---
+	Validation '#' escaped path https://github.com/unoplatform/uno/issues/5953
+	-->
+
+	<Warning
+	  Condition="$(MSBuildProjectFullPath.Contains('#')) and '$(UnoUIDisable5953Warning)'==''"
+	  Text="The path to your project contains the '#' character, which causes known build issues. Try moving your project to a different location. (See https://github.com/unoplatform/uno/issues/5953 for more details)."/>
   </Target>
 
 </Project>

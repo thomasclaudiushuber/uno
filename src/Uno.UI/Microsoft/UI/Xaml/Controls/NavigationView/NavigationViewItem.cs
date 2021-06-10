@@ -1,11 +1,21 @@
 ﻿// MUX reference NavigationViewItem.cpp, commit 4fe1fd5
 
+#if __ANDROID__
+// For performance considerations, we prefer to delay pressed and over state in order to avoid
+// visual state updates when starting scroll start or while scrolling, especially with touch.
+// This has a great impact on Android where ScrollViewer does not capture pointer while scrolling.
+#define UNO_USE_DEFERRED_VISUAL_STATES
+#endif
+
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using Windows.Devices.Input;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Uno.Disposables;
 using Uno.UI.Helpers.WinUI;
 using Windows.Foundation;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Automation;
 using Windows.UI.Xaml.Automation.Peers;
@@ -444,11 +454,11 @@ namespace Microsoft.UI.Xaml.Controls
 				{
 					if (isSelected)
 					{
-						if (m_isPressed)
+						if (m_isPressed && !_uno_isDefferingPressedState)
 						{
 							return c_pressedSelected;
 						}
-						else if (m_isPointerOver)
+						else if (m_isPointerOver && !_uno_isDefferingOverState)
 						{
 							return c_pointerOverSelected;
 						}
@@ -457,9 +467,9 @@ namespace Microsoft.UI.Xaml.Controls
 							return c_selected;
 						}
 					}
-					else if (m_isPointerOver)
+					else if (m_isPointerOver && !_uno_isDefferingOverState)
 					{
-						if (m_isPressed)
+						if (m_isPressed && !_uno_isDefferingPressedState)
 						{
 							return c_pressed;
 						}
@@ -468,7 +478,7 @@ namespace Microsoft.UI.Xaml.Controls
 							return c_pointerOver;
 						}
 					}
-					else if (m_isPressed)
+					else if (m_isPressed && !_uno_isDefferingPressedState)
 					{
 						return c_pressed;
 					}
@@ -825,6 +835,11 @@ namespace Microsoft.UI.Xaml.Controls
 				m_capturedPointer = pointer;
 			}
 
+#if UNO_USE_DEFERRED_VISUAL_STATES
+			_uno_isDefferingPressedState = true;
+			DeferUpdateVisualStateForPointer();
+#endif
+
 			UpdateVisualState(true);
 		}
 
@@ -854,6 +869,11 @@ namespace Microsoft.UI.Xaml.Controls
 
 		private void OnPresenterPointerEntered(object sender, PointerRoutedEventArgs args)
 		{
+#if UNO_USE_DEFERRED_VISUAL_STATES
+			_uno_isDefferingOverState = args.Pointer.PointerDeviceType != PointerDeviceType.Mouse;
+			DeferUpdateVisualStateForPointer();
+#endif
+
 			ProcessPointerOver(args);
 		}
 
@@ -926,6 +946,10 @@ namespace Microsoft.UI.Xaml.Controls
 			{
 				return;
 			}
+
+			_uno_isDefferingPressedState = false;
+			_uno_isDefferingOverState = false;
+			_uno_pointerDeferring?.Stop();
 
 			m_isPressed = false;
 			m_isPointerOver = false;

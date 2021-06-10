@@ -4,9 +4,7 @@
 		<TargetFrameworksCI>MonoAndroid11.0;MonoAndroid10.0;xamarinios10;net461;netstandard2.0;xamarinmac20</TargetFrameworksCI>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(UnoTargetFrameworkOverride)'!=''">
-		<TargetFrameworks>$(UnoTargetFrameworkOverride)</TargetFrameworks>
-	</PropertyGroup>
+	<Import Project="../targetframework-override.props" />
 
 	<PropertyGroup>
 		<AssemblyName>Uno.UI</AssemblyName>
@@ -32,10 +30,13 @@
 		<UnoForceProcessPRIResource>true</UnoForceProcessPRIResource>
 
 		<!-- Generate automation IDs in debug builds, use by UI tests. -->
-    <IsUiAutomationMappingEnabled Condition="'$(Configuration)'=='Debug'">true</IsUiAutomationMappingEnabled>
+		<IsUiAutomationMappingEnabled Condition="'$(Configuration)'=='Debug'">true</IsUiAutomationMappingEnabled>
 
 		<!-- Disable WPF targets -->
 		<ImportFrameworkWinFXTargets>false</ImportFrameworkWinFXTargets>
+
+		<!-- Set for dependencies that use msbuild nuget packaging (not nuspecs) -->
+		<PackageId Condition="'$(UNO_UWP_BUILD)'!='true'">Uno.WinUI</PackageId>
 	</PropertyGroup>
 
 	<Import Project="..\Uno.CrossTargetting.props" />
@@ -74,8 +75,8 @@
 	<ItemGroup>
 		<None Include="Extensions\CGSizeExtensions.iOSmacOS.cs" />
 		<None Include="Mixins\Wasm\VisualStatesMixins.g.cs">
-		  <DesignTime>True</DesignTime>
-		  <AutoGen>True</AutoGen>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
 		</None>
 		<None Include="Resources\AboutResources.txt" />
 		<None Include="Resources\Values\Attrs.xml" />
@@ -87,13 +88,12 @@
 
 	<ItemGroup>
 		<PackageReference Include="Uno.SourceGenerationTasks" />
-		<PackageReference Include="Uno.Core" Version="2.0.0" />
-		<PackageReference Include="Uno.Core.Build" Version="2.0.0" />
+		<PackageReference Include="Uno.Core" />
+		<PackageReference Include="Uno.Core.Build" />
 		<PackageReference Include="Uno.MonoAnalyzers" Version="1.0.0">
-		  <PrivateAssets>all</PrivateAssets>
+			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="System.Memory" Version="4.5.2" />
-		<PackageReference Include="xamarin.build.download" Version="0.4.11" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'MonoAndroid11.0'">
@@ -175,18 +175,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Include="Mixins\Android\BaseActivity.Callbacks.g.cs" />
-	  <Compile Include="Mixins\Android\FrameworkElementMixins.g.cs" />
-	  <Compile Include="Mixins\Android\FrameworkElementMixins.g.cs" />
-	  <Compile Include="Mixins\Android\VisualStatesMixins.g.cs" />
-	  <Compile Include="Mixins\DependencyPropertyMixins.g.cs" />
-	  <Compile Include="Mixins\DependencyPropertyMixins.g.cs" />
+		<Compile Include="Mixins\Android\BaseActivity.Callbacks.g.cs" />
+		<Compile Include="Mixins\Android\FrameworkElementMixins.g.cs" />
+		<Compile Include="Mixins\Android\FrameworkElementMixins.g.cs" />
+		<Compile Include="Mixins\Android\VisualStatesMixins.g.cs" />
+		<Compile Include="Mixins\DependencyPropertyMixins.g.cs" />
+		<Compile Include="Mixins\DependencyPropertyMixins.g.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Mixins\Wasm\VisualStatesMixins.tt">
-	    <LastGenOutput>VisualStatesMixins.g.cs</LastGenOutput>
-	  </None>
+		<None Update="Mixins\Wasm\VisualStatesMixins.tt">
+			<LastGenOutput>VisualStatesMixins.g.cs</LastGenOutput>
+		</None>
 	</ItemGroup>
 
 	<Target Name="GetPackagingOutputs" Condition=" '$(TargetFramework)' == 'uap10.0' " />
@@ -218,5 +218,7 @@
 	</Target>
 
 	<Import Project="MixinGeneration.targets" />
+
+	<!-- If any ItemGroup appears here with Remove=XXX, they should be deleted -->
 
 </Project>

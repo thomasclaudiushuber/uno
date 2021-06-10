@@ -9,6 +9,7 @@ using System.Threading;
 using Uno.Extensions;
 using UwpUnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding;
 using UwpBuffer = Windows.Storage.Streams.Buffer;
+using Uno.Storage.Internal;
 
 namespace Windows.Storage
 {
@@ -260,6 +261,11 @@ namespace Windows.Storage
 			}
 
 			using StreamWriter streamWriter = new StreamWriter(fileStream, systemEncoding);
+
+			// Configure autoflush, for it seems FlushAsync does not flush properly
+			// on .NET 6 preview 1 (WebAssembly). Failure in runtime tests otherwise.
+			streamWriter.AutoFlush = true;
+
 			await streamWriter.WriteAsync(contents);
 			await streamWriter.FlushAsync();
 		}
@@ -296,7 +302,11 @@ namespace Windows.Storage
 		private static async Task<Encoding> GetEncodingFromFileAsync(IStorageFile file)
 		{
 			// If the file has a local path, try to not create it
-			if (file.Path is {} path && !string.IsNullOrWhiteSpace(path) && !File.Exists(path))
+			if (file is StorageFile storageFile &&
+				storageFile.Provider == StorageProviders.Local &&
+				file.Path is { } path &&
+				!string.IsNullOrWhiteSpace(path) &&
+				!File.Exists(path))
 			{
 				return Encoding.UTF8;
 			}

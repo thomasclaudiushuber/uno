@@ -255,6 +255,12 @@ namespace Windows.UI.Xaml
 				UpdateDOMXamlProperty(nameof(LayoutSlotWithMarginsAndAlignments), LayoutSlotWithMarginsAndAlignments);
 			}
 
+			if (Visibility == Visibility.Collapsed)
+			{
+				// cf. OnVisibilityChanged
+				rect.X = rect.Y = -100000;
+			}
+
 			Uno.UI.Xaml.WindowManagerInterop.ArrangeElement(HtmlId, rect, clipRect);
 			OnViewportUpdated(clipRect ?? Rect.Empty);
 
@@ -409,14 +415,7 @@ namespace Windows.UI.Xaml
 			InvalidateMeasure();
 			UpdateHitTest();
 
-			if (newVisibility == Visibility.Visible)
-			{
-				ResetStyle("visibility");
-			}
-			else
-			{
-				SetStyle("visibility", "hidden");
-			}
+			WindowManagerInterop.SetVisibility(HtmlId, newVisibility == Visibility.Visible);
 
 			if (FeatureConfiguration.UIElement.AssignDOMXamlProperties)
 			{

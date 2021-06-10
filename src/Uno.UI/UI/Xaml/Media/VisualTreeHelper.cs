@@ -146,6 +146,17 @@ namespace Windows.UI.Xaml.Media
 				.AsReadOnly();
 		}
 
+		public static IReadOnlyList<Popup> GetOpenPopupsForXamlRoot(XamlRoot xamlRoot)
+		{
+			if (xamlRoot == XamlRoot.Current)
+			{
+				return GetOpenPopups(Window.Current);
+			}
+
+			return new Popup[0];
+		}
+
+
 		public static DependencyObject/* ? */ GetParent(DependencyObject reference)
 		{
 #if XAMARIN
@@ -221,8 +232,24 @@ namespace Windows.UI.Xaml.Media
 			view.AddView(child);
 #elif __IOS__ || __MACOS__
 			view.AddSubview(child);
-#elif NETSTANDARD
+#elif UNO_REFERENCE_API
 			view.AddChild(child);
+#else
+			throw new NotImplementedException("AddChild not implemented on this platform.");
+#endif
+		}
+
+		internal static void RemoveChild(UIElement view, UIElement child)
+		{
+#if __ANDROID__
+			view.RemoveView(child);
+#elif __IOS__ || __MACOS__
+			if(child.Superview == view)
+			{
+				child.RemoveFromSuperview();
+			}
+#elif UNO_REFERENCE_API
+			view.RemoveChild(child);
 #else
 			throw new NotImplementedException("AddChild not implemented on this platform.");
 #endif
@@ -239,8 +266,8 @@ namespace Windows.UI.Xaml.Media
 			var children = view.ChildrenShadow.ToList();
 			children.ForEach(v => v.RemoveFromSuperview());
 
-			return children; 
-#elif NETSTANDARD
+			return children;
+#elif UNO_REFERENCE_API
 			var children = GetChildren<_View>(view).ToList();
 			view.ClearChildren();
 
@@ -337,7 +364,7 @@ namespace Windows.UI.Xaml.Media
 				renderingBounds = parentToElement.Transform(renderingBounds);
 			}
 
-#if !__SKIA__
+#if !UNO_HAS_MANAGED_SCROLL_PRESENTER
 			// On Skia, the Scrolling is managed by the ScrollContentPresenter (as UWP), which is flagged as IsScrollPort.
 			// Note: We should still add support for the zoom factor ... which is not yet supported on Skia.
 			if (element is ScrollViewer sv)
@@ -357,11 +384,13 @@ namespace Windows.UI.Xaml.Media
 			}
 			else
 #endif
+#if !__MACOS__ // On macOS the SCP is using RenderTransforms for scrolling which has already been included.
 			if (element.IsScrollPort)
 			{
 				posRelToElement.X += element.ScrollOffsets.X;
 				posRelToElement.Y += element.ScrollOffsets.Y;
 			}
+#endif
 
 			TRACE($"- layoutSlot: {layoutSlot.ToDebugString()}");
 			TRACE($"- renderBounds (relative to element): {renderingBounds.ToDebugString()}");
@@ -441,19 +470,19 @@ namespace Windows.UI.Xaml.Media
 		}
 
 		private static Branch SearchDownForStaleBranch(UIElement staleRoot, Predicate<UIElement> isStale)
-			=> new Branch(staleRoot, SearchDownForStaleLeaf(staleRoot, isStale));
+			=> new Branch(staleRoot, SearchDownForLeaf(staleRoot, isStale));
 
-		private static UIElement SearchDownForStaleLeaf(UIElement staleRoot, Predicate<UIElement> isStale)
+		internal static UIElement SearchDownForLeaf(UIElement root, Predicate<UIElement> predicate)
 		{
-			foreach (var child in staleRoot.GetChildren().OfType<UIElement>().Reverse())
+			foreach (var child in root.GetChildren().OfType<UIElement>().Reverse())
 			{
-				if (isStale(child))
+				if (predicate(child))
 				{
-					return SearchDownForStaleLeaf(child, isStale);
+					return SearchDownForLeaf(child, predicate);
 				}
 			}
 
-			return staleRoot;
+			return root;
 		}
 
 		#region Helpers
@@ -555,7 +584,7 @@ namespace Windows.UI.Xaml.Media
 			}
 
 			/// <summary>
-			/// 
+			///
 			/// </summary>
 			/// <remarks>This method will pass through native element but will enumerate only UIElements</remarks>
 			/// <returns></returns>
@@ -574,7 +603,7 @@ namespace Windows.UI.Xaml.Media
 					}
 
 					yield return current;
-				} 
+				}
 			}
 
 			public override string ToString() => $"Root={Root.GetDebugName()} | Leaf={Leaf.GetDebugName()}";

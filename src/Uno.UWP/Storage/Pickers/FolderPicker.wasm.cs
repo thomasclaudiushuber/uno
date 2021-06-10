@@ -1,9 +1,11 @@
 ﻿#nullable enable
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Uno.Foundation;
-using System.Threading;
+using Uno.Helpers.Serialization;
+using Uno.Storage.Internal;
 
 namespace Windows.Storage.Pickers
 {
@@ -13,19 +15,28 @@ namespace Windows.Storage.Pickers
 
 		private async Task<StorageFolder?> PickSingleFolderTaskAsync(CancellationToken token)
 		{
-			var returnValue = await WebAssemblyRuntime.InvokeAsync($"{JsType}.pickSingleFolderAsync()");
-
-			if (returnValue is null)
+			if (!IsNativePickerSupported())
 			{
+				throw new NotSupportedException("Could not handle the request using any picker implementation.");
+			}
+
+			var pickedFolderJson = await WebAssemblyRuntime.InvokeAsync($"{JsType}.pickSingleFolderAsync()");
+
+			if (pickedFolderJson is null)
+			{
+				// User did not select any folder.
 				return null;
 			}
 
-			if (!Guid.TryParse(returnValue, out var guid))
-			{
-				throw new InvalidOperationException("GUID could not be parsed");
-			}
+			var info = JsonHelper.Deserialize<NativeStorageItemInfo>(pickedFolderJson);
 
-			return StorageFolder.GetFolderFromNativePathAsync("", guid);
+			return StorageFolder.GetFromNativeInfo(info, null);
+		}
+
+		private bool IsNativePickerSupported()
+		{
+			var isSupportedString = WebAssemblyRuntime.InvokeJS($"{JsType}.isNativeSupported()");
+			return bool.TryParse(isSupportedString, out var isSupported) && isSupported;
 		}
 	}
 }

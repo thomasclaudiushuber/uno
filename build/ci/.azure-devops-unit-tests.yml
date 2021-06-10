@@ -14,8 +14,12 @@ jobs:
       Default_Compiler:
         ADDITIONAL_FLAGS: ''
 
+      # Keep for future previews
+      # Preview:
+      #   ADDITIONAL_FLAGS: '/p:LangVersion=preview /p:UnoUIUseRoslynSourceGenerators=true /p:MicrosoftNetCompilerVersionOverride=3.8.0-3.final'
+
       CSharp9:
-        ADDITIONAL_FLAGS: '/p:LangVersion=preview /p:UnoUIUseRoslynSourceGenerators=true /p:MicrosoftNetCompilerVersionOverride=3.8.0-3.final'
+        ADDITIONAL_FLAGS: '/p:LangVersion=9.0 /p:UnoUIUseRoslynSourceGenerators=true'
 
   variables:
     CombinedConfiguration: Release|Any CPU
@@ -23,6 +27,7 @@ jobs:
 
     # This is required to be able to use hard links as much as possible
     NUGET_PACKAGES: $(Agent.WorkFolder)\.nuget
+
 
   steps:
   - checkout: self

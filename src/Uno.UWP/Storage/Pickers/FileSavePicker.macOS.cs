@@ -12,16 +12,22 @@ namespace Windows.Storage.Pickers
 {
 	public partial class FileSavePicker
 	{
+		private const int ModalResponseOk = 1;
+
 		private async Task<StorageFile?> PickSaveFileTaskAsync(CancellationToken token)
 		{
 			var savePicker = new NSSavePanel();
 			savePicker.DirectoryUrl = new NSUrl(GetStartPath(), true);
 			savePicker.AllowedFileTypes = GetFileTypes();
+			if (!string.IsNullOrEmpty(CommitButtonText))
+			{
+				savePicker.Prompt = CommitButtonText;
+			}
 			if (SuggestedFileName != null)
 			{
 				savePicker.NameFieldStringValue = SuggestedFileName;
 			}
-			if (savePicker.RunModal() == 1)
+			if (savePicker.RunModal() == ModalResponseOk)
 			{
 				return await StorageFile.GetFileFromPathAsync(savePicker.Url.Path);
 			}
@@ -35,7 +41,7 @@ namespace Windows.Storage.Pickers
 		{
 			var specialFolder = SuggestedStartLocation switch
 			{
-				PickerLocationId.DocumentsLibrary =>  NSSearchPathDirectory.DocumentDirectory,
+				PickerLocationId.DocumentsLibrary => NSSearchPathDirectory.DocumentDirectory,
 				PickerLocationId.Desktop => NSSearchPathDirectory.DesktopDirectory,
 				PickerLocationId.MusicLibrary => NSSearchPathDirectory.MusicDirectory,
 				PickerLocationId.PicturesLibrary => NSSearchPathDirectory.PicturesDirectory,

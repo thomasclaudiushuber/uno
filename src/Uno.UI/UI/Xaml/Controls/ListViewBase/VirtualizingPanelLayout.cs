@@ -13,6 +13,7 @@ using Uno;
 
 namespace Windows.UI.Xaml.Controls
 {
+    [Windows.UI.Xaml.Data.Bindable]
 	abstract partial class VirtualizingPanelLayout : IScrollSnapPointsInfo
 	{
 		/// <summary>
@@ -30,7 +31,7 @@ namespace Windows.UI.Xaml.Controls
 		/// </summary>
 		/// <remarks>For <see cref="ItemsStackPanel"/> layouting this is identical to <see cref="Orientation"/> but for <see cref="ItemsWrapGrid"/> it is the opposite of <see cref="Orientation"/>.</remarks>
 		public abstract Orientation ScrollOrientation { get; }
-#if !NETSTANDARD2_0
+#if !UNO_REFERENCE_API
 		private protected readonly ILayouter _layouter = new VirtualizingPanelLayouter();
 		internal ILayouter Layouter => _layouter;
 #endif
@@ -276,7 +277,7 @@ namespace Windows.UI.Xaml.Controls
 			return (minItem, min);
 		}
 
-#if !NETSTANDARD2_0
+#if !UNO_REFERENCE_API
 		private class VirtualizingPanelLayouter : Layouter
 		{
 

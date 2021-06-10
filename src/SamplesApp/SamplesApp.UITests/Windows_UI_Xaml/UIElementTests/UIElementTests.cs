@@ -11,7 +11,7 @@ using Uno.UITest.Helpers.Queries;
 namespace SamplesApp.UITests.Windows_UI_Xaml
 {
 	[TestFixture]
-	public class UIElementTests : SampleControlUITestBase
+	public partial class UIElementTests : SampleControlUITestBase
 	{
 		// TODO: convert this to RuntimeTests https://github.com/unoplatform/uno/issues/2114#issuecomment-555209397
 		[Test]
@@ -43,7 +43,7 @@ namespace SamplesApp.UITests.Windows_UI_Xaml
 			_app.WaitForElement("SpacerBorder");
 			var spacerRect = _app.GetRect("SpacerBorder");
 
-			using var scrn = TakeScreenshot("Ready");
+			using var scrn = TakeScreenshot("Ready", ignoreInSnapshotCompare: true);
 
 			ImageAssert.HasColorAt(scrn, spacerRect.X, spacerRect.Y, Color.Red);
 		}

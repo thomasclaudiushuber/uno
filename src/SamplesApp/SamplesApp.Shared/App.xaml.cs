@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -28,6 +28,8 @@ using Uno.Logging;
 using Windows.Graphics.Display;
 using System.Globalization;
 using Windows.UI.ViewManagement;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging.Console;
 #if HAS_UNO_WINUI
 using LaunchActivatedEventArgs = Microsoft.UI.Xaml.LaunchActivatedEventArgs;
 #else
@@ -41,6 +43,11 @@ namespace SamplesApp
 	/// </summary>
 	sealed partial class App : Application
 	{
+		static App()
+		{
+			ConfigureFilters();
+		}
+
 		/// <summary>
 		/// Initializes the singleton application object.  This is the first line of authored code
 		/// executed, and as such is the logical equivalent of main() or WinMain().
@@ -51,7 +58,6 @@ namespace SamplesApp
 			Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
 			Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
 
-			ConfigureFilters(LogExtensionPoint.AmbientLoggerFactory);
 			ConfigureFeatureFlags();
 
 			AssertIssue1790();
@@ -120,7 +126,7 @@ namespace SamplesApp
 
 			ApplicationView.GetForCurrentView().Title = "Uno Samples";
 
-			DisplayLaunchArguments(e);
+			HandleLaunchArguments(e);
 		}
 
 		private static void ProcessEventArgs(LaunchActivatedEventArgs e)
@@ -253,8 +259,13 @@ namespace SamplesApp
 			}
 		}
 
-		private async void DisplayLaunchArguments(LaunchActivatedEventArgs launchActivatedEventArgs)
+		private async void HandleLaunchArguments(LaunchActivatedEventArgs launchActivatedEventArgs)
 		{
+			if (await TryNavigateToLaunchSampleAsync(launchActivatedEventArgs))
+			{
+				return;
+			}
+
 			if (!string.IsNullOrEmpty(launchActivatedEventArgs.Arguments))
 			{
 				var dlg = new MessageDialog(launchActivatedEventArgs.Arguments, "Launch arguments");
@@ -263,6 +274,39 @@ namespace SamplesApp
 					await dlg.ShowAsync();
 				}
 			}
+		}
+
+		private async Task<bool> TryNavigateToLaunchSampleAsync(LaunchActivatedEventArgs launchActivatedEventArgs)
+		{
+			const string samplePrefix = "sample=";
+			try
+			{
+				if (launchActivatedEventArgs.Arguments == null)
+				{
+					return false;
+				}
+
+				var args = Uri.UnescapeDataString(launchActivatedEventArgs.Arguments);
+
+				if (string.IsNullOrEmpty(args) || !args.StartsWith(samplePrefix))
+				{
+					return false;
+				}
+
+				args = args.Substring(samplePrefix.Length);
+
+				var pathParts = args.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+				var category = pathParts[0];
+				var sampleName = pathParts[1];
+
+				await SampleControl.Presentation.SampleChooserViewModel.Instance.SetSelectedSample(CancellationToken.None, category, sampleName);
+				return true;
+			}
+			catch (Exception ex)
+			{
+				this.Log().Error($"Could not navigate to initial sample - {ex}");
+			}
+			return false;
 		}
 
 		/// <summary>
@@ -291,75 +335,79 @@ namespace SamplesApp
 			deferral.Complete();
 		}
 
-		void ConfigureFilters(ILoggerFactory factory)
+		public static void ConfigureFilters()
 		{
 #if HAS_UNO
 			System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (s, e) => typeof(App).Log().Error("UnobservedTaskException", e.Exception);
 			AppDomain.CurrentDomain.UnhandledException += (s, e) => typeof(App).Log().Error("UnhandledException", e.ExceptionObject as Exception);
 #endif
-
-			factory
-				.WithFilter(new FilterLoggerSettings
-					{
-						{ "Uno", LogLevel.Warning },
-						{ "Windows", LogLevel.Warning },
-						{ "Microsoft", LogLevel.Warning },
-
-						// RemoteControl and HotReload related
-						{ "Uno.UI.RemoteControl", LogLevel.Information },
-
-						// { "Uno.Foundation.WebAssemblyRuntime", LogLevel.Debug },
-						// { "Windows.UI.Xaml.Controls.PopupPanel", LogLevel.Debug },
-
-						// Generic Xaml events
-						// { "Windows.UI.Xaml", LogLevel.Debug },
-						// { "Windows.UI.Xaml.Media", LogLevel.Debug },
-						// { "Windows.UI.Xaml.Shapes", LogLevel.Debug },
-						// { "Windows.UI.Xaml.VisualStateGroup", LogLevel.Debug },
-						// { "Windows.UI.Xaml.StateTriggerBase", LogLevel.Debug },
-						// { "Windows.UI.Xaml.UIElement", LogLevel.Debug },
-						// { "Windows.UI.Xaml.FrameworkElement", LogLevel.Trace },
-						// { "Windows.UI.Xaml.Controls.TextBlock", LogLevel.Debug },
-
-						// Layouter specific messages
-						// { "Windows.UI.Xaml.Controls", LogLevel.Debug },
-						// { "Windows.UI.Xaml.Controls.Layouter", LogLevel.Debug },
-						// { "Windows.UI.Xaml.Controls.Panel", LogLevel.Debug },
-						// { "Windows.Storage", LogLevel.Debug },
-
-						// Binding related messages
-						// { "Windows.UI.Xaml.Data", LogLevel.Debug },
-						// { "Windows.UI.Xaml.Data", LogLevel.Debug },
-
-						//  Binder memory references tracking
-						// { "ReferenceHolder", LogLevel.Debug },
-
-						// ListView-related messages
-						// { "Windows.UI.Xaml.Controls.ListViewBase", LogLevel.Debug },
-						// { "Windows.UI.Xaml.Controls.ListView", LogLevel.Debug },
-						// { "Windows.UI.Xaml.Controls.GridView", LogLevel.Debug },
-						// { "Windows.UI.Xaml.Controls.VirtualizingPanelLayout", LogLevel.Debug },
-						// { "Windows.UI.Xaml.Controls.NativeListViewBase", LogLevel.Debug },
-						// { "Windows.UI.Xaml.Controls.ListViewBaseSource", LogLevel.Debug }, //iOS
-						// { "Windows.UI.Xaml.Controls.ListViewBaseInternalContainer", LogLevel.Debug }, //iOS
-						// { "Windows.UI.Xaml.Controls.NativeListViewBaseAdapter", LogLevel.Debug }, //Android
-						// { "Windows.UI.Xaml.Controls.BufferViewCache", LogLevel.Debug }, //Android
-						// { "Windows.UI.Xaml.Controls.VirtualizingPanelGenerator", LogLevel.Debug }, //WASM
-					}
-				)
-#if DEBUG
-				//.AddConsole(LogLevel.Trace);
-				.AddConsole(LogLevel.Debug);
-
+			var factory = LoggerFactory.Create(builder =>
+			{
+#if __WASM__
+				builder.AddProvider(new Uno.Extensions.Logging.WebAssembly.WebAssemblyConsoleLoggerProvider());
 #else
-				.AddConsole(LogLevel.Warning);
+				builder.AddConsole();
 #endif
+
+				builder.AddFilter("Uno", LogLevel.Warning);
+				builder.AddFilter("Windows", LogLevel.Warning);
+				builder.AddFilter("Microsoft", LogLevel.Warning);
+
+				// RemoteControl and HotReload related
+				builder.AddFilter("Uno.UI.RemoteControl", LogLevel.Information);
+
+				// builder.AddFilter("Uno.Foundation.WebAssemblyRuntime", LogLevel.Debug );
+				// builder.AddFilter("Windows.UI.Xaml.Controls.PopupPanel", LogLevel.Debug );
+
+				// Generic Xaml events
+				// builder.AddFilter("Windows.UI.Xaml", LogLevel.Debug );
+				// builder.AddFilter("Windows.UI.Xaml.Media", LogLevel.Debug );
+				// builder.AddFilter("Windows.UI.Xaml.Shapes", LogLevel.Debug );
+				// builder.AddFilter("Windows.UI.Xaml.VisualStateGroup", LogLevel.Debug );
+				// builder.AddFilter("Windows.UI.Xaml.StateTriggerBase", LogLevel.Debug );
+				// builder.AddFilter("Windows.UI.Xaml.UIElement", LogLevel.Debug );
+				// builder.AddFilter("Windows.UI.Xaml.FrameworkElement", LogLevel.Trace );
+				// builder.AddFilter("Windows.UI.Xaml.Controls.TextBlock", LogLevel.Debug );
+
+				// Layouter specific messages
+				// builder.AddFilter("Windows.UI.Xaml.Controls", LogLevel.Debug );
+				// builder.AddFilter("Windows.UI.Xaml.Controls.Layouter", LogLevel.Debug );
+				// builder.AddFilter("Windows.UI.Xaml.Controls.Panel", LogLevel.Debug );
+				// builder.AddFilter("Windows.Storage", LogLevel.Debug );
+
+				// Binding related messages
+				// builder.AddFilter("Windows.UI.Xaml.Data", LogLevel.Debug );
+				// builder.AddFilter("Windows.UI.Xaml.Data", LogLevel.Debug );
+
+				// Binder memory references tracking
+				// builder.AddFilter("Uno.UI.DataBinding.BinderReferenceHolder", LogLevel.Debug );
+
+				// builder.AddFilter(ListView-related messages
+				// builder.AddFilter("Windows.UI.Xaml.Controls.ListViewBase", LogLevel.Debug );
+				// builder.AddFilter("Windows.UI.Xaml.Controls.ListView", LogLevel.Debug );
+				// builder.AddFilter("Windows.UI.Xaml.Controls.GridView", LogLevel.Debug );
+				// builder.AddFilter("Windows.UI.Xaml.Controls.VirtualizingPanelLayout", LogLevel.Debug );
+				// builder.AddFilter("Windows.UI.Xaml.Controls.NativeListViewBase", LogLevel.Debug );
+				// builder.AddFilter("Windows.UI.Xaml.Controls.ListViewBaseSource", LogLevel.Debug ); //iOS
+				// builder.AddFilter("Windows.UI.Xaml.Controls.ListViewBaseInternalContainer", LogLevel.Debug ); //iOS
+				// builder.AddFilter("Windows.UI.Xaml.Controls.NativeListViewBaseAdapter", LogLevel.Debug ); //Android
+				// builder.AddFilter("Windows.UI.Xaml.Controls.BufferViewCache", LogLevel.Debug ); //Android
+				// builder.AddFilter("Windows.UI.Xaml.Controls.VirtualizingPanelGenerator", LogLevel.Debug ); //WASM
+
+
+			});
+
+			Uno.Extensions.LogExtensionPoint.AmbientLoggerFactory = factory;
 		}
 
 		static void ConfigureFeatureFlags()
 		{
 #if !NETFX_CORE
 			Uno.UI.FeatureConfiguration.Style.UseUWPDefaultStylesOverride[typeof(CommandBar)] = false;
+#endif
+
+#if __IOS__
+			Uno.UI.FeatureConfiguration.CommandBar.AllowNativePresenterContent = true;
 #endif
 		}
 
