@@ -5,11 +5,11 @@ jobs:
 
 - job: UITests_Screenshots_Compare_before
   displayName: 'UI Tests Screenshots Comparison'
+
   steps:
   - checkout: self
     clean: true
-  - script: |
-      return 42
+  - script: return 42
 
 - job: UITests_Screenshots_Compare
   displayName: 'UI Tests Screenshots Comparison'
@@ -34,6 +34,9 @@ jobs:
   variables:
     COMPARE_WORKDIR: $(Build.SourcesDirectory)\snapshot-compare
 
+  steps:
+  - checkout: self
+    clean: true
 
   - task: NuGetToolInstaller@0
     inputs:
