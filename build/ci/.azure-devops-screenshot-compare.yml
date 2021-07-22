@@ -29,7 +29,7 @@ jobs:
   #  - iOS_Snaphot_Tests_Group_03
   #  - iOS_Snaphot_Tests_Group_04
 
-  condition: ge(variables['System.JobAttempt'], 5)
+  condition: ge(variables['System.StageAttempt'], 5)
 
   pool: ${{ parameters.poolName }}
 
