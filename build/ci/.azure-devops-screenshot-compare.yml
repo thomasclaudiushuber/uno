@@ -3,9 +3,16 @@ parameters:
 
 jobs:
 
+- job: UITests_Screenshots_Compare_before
+  displayName: 'UI Tests Screenshots Comparison'
+  steps:
+  - checkout: self
+    clean: true
+
 - job: UITests_Screenshots_Compare
   displayName: 'UI Tests Screenshots Comparison'
-  #dependsOn:
+  dependsOn:
+     - UITests_Screenshots_Compare_before
   #  - Wasm_UITests_Snap
   #  - Wasm_UITests_Automated
   #  - Android_Tests
@@ -25,9 +32,6 @@ jobs:
   variables:
     COMPARE_WORKDIR: $(Build.SourcesDirectory)\snapshot-compare
 
-  steps:
-  - checkout: self
-    clean: true
 
   - task: NuGetToolInstaller@0
     inputs:
