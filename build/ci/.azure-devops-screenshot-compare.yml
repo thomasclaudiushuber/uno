@@ -8,6 +8,8 @@ jobs:
   steps:
   - checkout: self
     clean: true
+  - script: |
+      return 42
 
 - job: UITests_Screenshots_Compare
   displayName: 'UI Tests Screenshots Comparison'
