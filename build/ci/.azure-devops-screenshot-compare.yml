@@ -6,6 +6,8 @@ jobs:
 - job: UITests_Screenshots_Compare_before
   displayName: 'UI Tests Screenshots Comparison'
 
+  pool: ${{ parameters.poolName }}
+
   steps:
   - checkout: self
     clean: true
