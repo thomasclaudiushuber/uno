@@ -5,8 +5,9 @@ parameters:
   JobName: ''
   JobTimeoutInMinutes: ''
   JobDisplayName: ''
-  UITEST_SNAPSHOTS_ONLY: ''
+  UITEST_TEST_MODE_NAME: ''
   UITEST_SNAPSHOTS_GROUP: ''
+  UNO_UITEST_BUCKET_ID: ''
   nugetPackages: ''
 
 jobs:
@@ -75,9 +76,9 @@ jobs:
     env:
       BUILD_SOURCESDIRECTORY: "$(build.sourcesdirectory)"
       BUILD_ARTIFACTSTAGINGDIRECTORY: "$(build.artifactstagingdirectory)"
-      UITEST_SNAPSHOTS_ONLY: "${{ parameters.UITEST_SNAPSHOTS_ONLY }}"
+      UITEST_TEST_MODE_NAME: "${{ parameters.UITEST_TEST_MODE_NAME }}"
       UITEST_SNAPSHOTS_GROUP: "${{ parameters.UITEST_SNAPSHOTS_GROUP }}"
-      UITEST_AUTOMATED_GROUP: "${{ parameters.UITEST_AUTOMATED_GROUP }}"
+      UNO_UITEST_BUCKET_ID: "${{ parameters.UNO_UITEST_BUCKET_ID }}"
       UNO_UITEST_IOSBUNDLE_PATH: "$(build.sourcesdirectory)/build/ios-uitest-build/SamplesApp.app"
 
   - task: PublishTestResults@2

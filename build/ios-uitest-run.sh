@@ -13,7 +13,7 @@ cd $BUILD_SOURCESDIRECTORY/build
 export NUNIT_VERSION=3.11.1
 mono nuget/nuget.exe install NUnit.ConsoleRunner -Version $NUNIT_VERSION
 
-if [ "$UITEST_SNAPSHOTS_ONLY" == 'true' ];
+if [ "$UITEST_TEST_MODE_NAME" == 'Snapshots' ];
 then
 	export SCREENSHOTS_FOLDERNAME=ios-Snap
 
@@ -24,59 +24,33 @@ then
 		and Description !~ 'automated:Uno.UI.Samples.Content.UITests.CommandBar.*' \
 		and Description =~ 'runGroup:$UITEST_SNAPSHOTS_GROUP' \
 	"
-else
+
+elif [ "$UITEST_TEST_MODE_NAME" == 'Automated' ];
+then
 	export SCREENSHOTS_FOLDERNAME=ios
 
-	# Note for test authors, add tests in the last group, notify devops
-	# notify devops when the group gets too big.
-	# See https://github.com/unoplatform/uno/issues/1955 for additional details
+	export TEST_FILTERS="\
+		namespace != 'SamplesApp.UITests.Snap' \
+		and class != 'SamplesApp.UITests.Runtime.BenchmarkDotNetTests' \
+		and class != 'SamplesApp.UITests.Runtime.RuntimeTests' \
+		and cat =~ 'testBucket:$UNO_UITEST_BUCKET_ID'
+	";
 
-	if [ "$UITEST_AUTOMATED_GROUP" == '1' ];
-	then
-		export TEST_FILTERS=" \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Controls.ButtonTests' or \
-			namespace = 'SamplesApp.UITests' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Input.VisualState_Tests' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Controls.FlyoutTests' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Controls.DatePickerTests' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Controls.WUXProgressRingTests' or \
-			class = 'SamplesApp.UITests.Windows_UI_Xaml.DragAndDropTests.DragDrop_ListViewReorder_Automated' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Controls.ListViewTests'
-		"
-	elif [ "$UITEST_AUTOMATED_GROUP" == '2' ];
-	then
-		export TEST_FILTERS=" \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Media.Animation_Tests' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Controls.ControlTests' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Controls.TextBlockTests' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Controls.ImageTests' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml.FocusManagerDirectionTests' or \
-			namespace = 'SamplesApp.UITests.Microsoft_UI_Xaml_Controls.NumberBoxTests' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Controls.TextBoxTests'
-		"
-	elif [ "$UITEST_AUTOMATED_GROUP" == '3' ];
-	then
-		export TEST_FILTERS=" \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Controls.PivotTests' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Controls.CommandBarTests' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Controls.ComboBoxTests' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Media_Animation' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Controls.BorderTests' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Controls.MenuFlyoutTests' or \
-			class = 'SamplesApp.UITests.Windows_UI_Xaml_Shapes.Basics_Shapes_Tests' or \
-			namespace = 'SamplesApp.UITests.Windows_UI_Xaml_Controls.ScrollViewerTests'
-		"
-	elif [ "$UITEST_AUTOMATED_GROUP" == '4' ];
-	then
-		export TEST_FILTERS=" \
-			class = 'SamplesApp.UITests.Runtime.RuntimeTests'
-		"
-	elif [ "$UITEST_AUTOMATED_GROUP" == 'Benchmarks' ];
-	then
-		export TEST_FILTERS=" \
-			class = 'SamplesApp.UITests.Runtime.BenchmarkDotNetTests'
-		"
-	fi
+elif [ "$UITEST_TEST_MODE_NAME" == 'RuntimeTests' ];
+then
+	export SCREENSHOTS_FOLDERNAME=ios-runtimetests
+
+	export TEST_FILTERS="\
+		class == 'SamplesApp.UITests.Runtime.RuntimeTests' \
+	";
+
+elif [ "$UITEST_TEST_MODE_NAME" == 'Benchmarks' ];
+then
+	export SCREENSHOTS_FOLDERNAME=ios-benchmarks
+
+	export TEST_FILTERS=" \
+		class = 'SamplesApp.UITests.Runtime.BenchmarkDotNetTests'
+	"
 fi
 
 export UNO_UITEST_PLATFORM=iOS

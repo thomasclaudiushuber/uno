@@ -218,18 +218,24 @@ namespace SamplesApp.UITests
 			return methodInfo?.GetCustomAttributes(typeof(T), true) is T[] array ? array : new T[0];
 		}
 
-		private IEnumerable<Platform> GetActivePlatforms()
+		private Platform[] GetActivePlatforms()
 		{
 			var currentTest = TestContext.CurrentContext.Test;
 			if (currentTest.ClassName == null)
 			{
-				yield break;
+				return new Platform[0];
 			}
+
+			List<Platform> classPlatforms = null;
+			List<Platform> methodPlatforms = null;
+
 			if (Type.GetType(currentTest.ClassName) is { } classType)
 			{
 				if (classType.GetCustomAttributes(typeof(ActivePlatformsAttribute), false) is
 					ActivePlatformsAttribute[] classAttributes)
 				{
+					classPlatforms = new List<Platform>();
+
 					foreach (var attr in classAttributes)
 					{
 						if (attr.Platforms == null)
@@ -239,7 +245,7 @@ namespace SamplesApp.UITests
 
 						foreach (var platform in attr.Platforms)
 						{
-							yield return platform;
+							classPlatforms.Add(platform);
 						}
 					}
 				}
@@ -248,10 +254,13 @@ namespace SamplesApp.UITests
 				{
 					var testMethodInfo = classType.GetMethod(currentTest.MethodName);
 
+
 					if (testMethodInfo is { } mi &&
 					    mi.GetCustomAttributes(typeof(ActivePlatformsAttribute), false) is
 						    ActivePlatformsAttribute[] methodAttributes)
 					{
+						methodPlatforms = new List<Platform>();
+
 						foreach (var attr in methodAttributes)
 						{
 							if (attr.Platforms == null)
@@ -261,13 +270,22 @@ namespace SamplesApp.UITests
 
 							foreach (var platform in attr.Platforms)
 							{
-								yield return platform;
+								// If a list of platforms is specified on the class
+								// then unavailable platforms are excluded even when used on the
+								// test method.
+								if (classPlatforms == null || classPlatforms.Contains(platform))
+								{
+									methodPlatforms.Add(platform);
+								}
 							}
 						}
 					}
 				}
-
 			}
+
+			return methodPlatforms?.ToArray()
+				?? classPlatforms?.ToArray()
+				?? new Platform[0];
 		}
 
 		protected void Run(string metadataName, bool waitForSampleControl = true, bool skipInitialScreenshot = false, int sampleLoadTimeout = 5)
