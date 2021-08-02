@@ -69,6 +69,44 @@ namespace SamplesApp.UITests.Windows_UI_Xaml_Shapes
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class Shapes_Tests { }
 }
+namespace SamplesApp.UITests.Windows_UI_Xaml_Media.Transform_Tests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class Basics_Automated { }
+}
+namespace SamplesApp.UITests.Windows_UI_Xaml_Media.SolidColorBrushTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class SolidColorBrush_Tests { }
+}
+namespace SamplesApp.UITests.Windows_UI_Xaml_Media.RevealBrushTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class RevealBrush_Tests { }
+}
+namespace SamplesApp.UITests.Windows_UI_Xaml_Media.ImageBrushTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class ImageBrush_Shape_Fill_StretchAndAlignment { }
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class ImageBrush_WriteableBitmap { }
+}
+namespace SamplesApp.UITests.Windows_UI_Xaml_Media.GradientBrushTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class LinearGradientBrush_Tests { }
+}
+namespace SamplesApp.UITests.Windows_UI_Xaml_Media.GeometryTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class GeometryTests { }
+}
 namespace SamplesApp.UITests.Windows_UI_Xaml_Input
 {
 
@@ -77,19 +115,29 @@ namespace SamplesApp.UITests.Windows_UI_Xaml_Input
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class DoubleTapped_Tests { }
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class Enability_Tests { }
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class EventSequence_Tests { }
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class Focus_Tests { }
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class GestureEventsCommons_Tests { }
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class HitTest_Image_Tests { }
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class HitTest_Shapes_Tests { }
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class Holding_Tests { }
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class Manipulation_Tests { }
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class NestedHandling_Tests { }
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class RightTapped_Tests { }
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class RoutedEventIsEnabled_Tests { }
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class ScrollViewer_Pointer_Tests { }
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class Tapped_Tests { }
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
@@ -101,17 +149,65 @@ namespace SamplesApp.UITests.Windows_UI_Xaml_Automation
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class AutomationId_Tests { }
 }
+namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.WebViewTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class WebView_Tests { }
+}
+namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.ToolTipTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class ToolTip_Tests { }
+}
+namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.ToggleSwitchTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class ToggleSwitch_Tests { }
+}
 namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.TimePickerTests
 {
 
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class TimePickerTests_Tests { }
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class DragCoordinates_Tests { }
+}
+namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.ThumbTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class ThumbTests { }
+}
+namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.SwipeControlTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class SwipeControlTests { }
+}
+namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.SplitViewTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class BindableDrawerLayoutTests { }
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class SplitViewTests { }
 }
 namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.SliderTests
 {
 
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class Given_Slider { }
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class Slider_Vertical_Tests { }
+}
+namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.ScrollBarTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class UnoSamplesTests_ScrollBar { }
 }
 namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.RadioButtonTests
 {
@@ -135,11 +231,29 @@ namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.NavigationViewTests
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class NavigationView_Tests { }
 }
+namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.FlipViewTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class FlipView_Tests { }
+}
+namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.ContentDialogTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class ContentDialog_Tests { }
+}
 namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.CanvasTests
 {
 
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class Canvas_Measurement_Tests { }
+}
+namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.BitmapIconTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class BitmapIcon_Tests { }
 }
 namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.FrameworkElementTests
 {
@@ -151,7 +265,17 @@ namespace SamplesApp.UITests.Windows_UI_Xaml
 {
 
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class AppXamlResourcesTests { }
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class UIElementTests { }
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class WasmTests { }
+}
+namespace SamplesApp.UITests.Windows_UI_Xaml.VisualStateManagerTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class VisualStateManagerTest { }
 }
 namespace SamplesApp.UITests.Windows_UI_Xaml.DragAndDropTests
 {
@@ -168,6 +292,30 @@ namespace SamplesApp.UITests.Windows_UI_Xaml.ContentControlTests
 
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class ContentControlBehaviorTests { }
+}
+namespace SamplesApp.UITests.Windows_UI_Xaml.ClippingTests
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class ClippingTests_Tests { }
+}
+namespace SamplesApp.UITests.Windows_Devices
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class GyrometerTests { }
+}
+namespace SamplesApp.UITests.Windows_ApplicationModel_Resources
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class ResourceLoader_Simple { }
+}
+namespace SamplesApp.UITests.Wasm
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class Given_CustomEvents { }
 }
 namespace SamplesApp.UITests.Toolkit
 {
@@ -200,6 +348,12 @@ namespace SamplesApp.UITests.Microsoft_UI_Xaml_Controls.NavigationViewTests
 
 	[ActivePlatforms(Platform.Android, Platform.Browser)]
 	partial class NavigationView_Tests { }
+}
+namespace SamplesApp.UITests.CommandBar
+{
+
+	[ActivePlatforms(Platform.Android, Platform.Browser)]
+	partial class UnoSamples_Tests { }
 }
 namespace SamplesApp.UITests.Runtime
 {

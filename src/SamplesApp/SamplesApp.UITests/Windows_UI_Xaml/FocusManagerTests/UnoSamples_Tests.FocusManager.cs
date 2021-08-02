@@ -11,7 +11,9 @@ using Uno.UITest.Helpers.Queries;
 
 namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.FocusManagerTests
 {
-	[ActivePlatforms(Platform.iOS, Platform.Browser)]   // Ignore focus tests for android, focus is getting stolen incorrectly 
+	// Ignore focus tests for android, focus is getting stolen incorrectly
+	// Ignore focus tests on iOS https://github.com/unoplatform/uno/issues/195
+	[ActivePlatforms(Platform.Browser)] 
 	[TestFixture]
 	public partial class FocusManagerTests_Tests : SampleControlUITestBase
 	{
