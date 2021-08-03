@@ -46,7 +46,7 @@ namespace SamplesApp.UITests
 
 			// Start the app only once, so the tests runs don't restart it
 			// and gain some time for the tests.
-			AppInitializer.ColdStartApp();
+			// AppInitializer.ColdStartApp();
 		}
 
 		public void ValidateAppMode()
@@ -76,8 +76,8 @@ namespace SamplesApp.UITests
 
 			// Check if the test needs to be ignore or not
 			// If nothing specified, it is considered as a global test
-			var platforms = GetActivePlatforms().Distinct().ToArray();
-			if (platforms.Length != 0)
+			var platforms = GetActivePlatforms()?.Distinct().ToArray();
+			if (platforms != null)
 			{
 				// Otherwise, we need to define on which platform the test is running and compare it with targeted platform
 				var shouldIgnore = false;
@@ -107,7 +107,7 @@ namespace SamplesApp.UITests
 				{
 					var list = string.Join(", ", platforms.Select(p => p.ToString()));
 
-					Assert.Ignore($"This test is ignored on this platform (runs on {list})");
+					Assert.Ignore($"This test is ignored on this platform (runs on [{list}])");
 				}
 			}
 
@@ -232,7 +232,7 @@ namespace SamplesApp.UITests
 			if (Type.GetType(currentTest.ClassName) is { } classType)
 			{
 				if (classType.GetCustomAttributes(typeof(ActivePlatformsAttribute), false) is
-					ActivePlatformsAttribute[] classAttributes)
+					ActivePlatformsAttribute[] classAttributes && classAttributes.Length != 0)
 				{
 					classPlatforms = new List<Platform>();
 
@@ -254,10 +254,9 @@ namespace SamplesApp.UITests
 				{
 					var testMethodInfo = classType.GetMethod(currentTest.MethodName);
 
-
 					if (testMethodInfo is { } mi &&
 					    mi.GetCustomAttributes(typeof(ActivePlatformsAttribute), false) is
-						    ActivePlatformsAttribute[] methodAttributes)
+						    ActivePlatformsAttribute[] methodAttributes && methodAttributes.Length != 0)
 					{
 						methodPlatforms = new List<Platform>();
 
@@ -285,7 +284,7 @@ namespace SamplesApp.UITests
 
 			return methodPlatforms?.ToArray()
 				?? classPlatforms?.ToArray()
-				?? new Platform[0];
+				?? null;
 		}
 
 		protected void Run(string metadataName, bool waitForSampleControl = true, bool skipInitialScreenshot = false, int sampleLoadTimeout = 5)
