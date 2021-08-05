@@ -145,6 +145,7 @@ When the value of `WinRTFeatureConfiguration.Accessiblity.HighContrast` is chang
 - Use a converter to trim long text. While a `TextBlock` might ellipsize long text, the screen reader will read the entire text provided.
 - Avoid creating custom controls when you can use built-in ones. If you must, make sure to implement and provide an appropriate `AutomationPeer`.
 - You can disable accessibility focus of native elements using `android:ImportantForAccessibility="No"` and `ios:IsAccessibilityElement="False"`.
+- [iOS] VoiceOver navigates from top-left to bottom-right, irrespective of the view hierarchy. It skips over off-screen elements to reach a on-screen element like a bottom navigation bar. You can avoid this by setting [`shouldGroupAccessibilityChildren`](https://developer.apple.com/documentation/objectivec/nsobject/1615143-shouldgroupaccessibilitychildren) to true on the parent control using an attached properties.
 
 ## Enabling the screen reader
 
