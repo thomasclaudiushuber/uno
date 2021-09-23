@@ -239,7 +239,7 @@ namespace Windows.UI.Xaml
 				}
 
 				OnArrangeVisual(newRect, clip);
-				OnViewportUpdated(clippedFrame ?? Rect.Empty);
+				Viewport = clippedFrame ?? Rect.Infinite;
 			}
 			else
 			{

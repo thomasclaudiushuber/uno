@@ -205,6 +205,7 @@ namespace Windows.UI.Xaml
 		}
 
 		internal NativeRenderTransformAdapter _renderTransform;
+		private Rect _viewport;
 
 		partial void OnRenderTransformSet();
 		#endregion
@@ -523,10 +524,11 @@ namespace Windows.UI.Xaml
 			}
 
 			ApplyNativeClip(rect);
-			OnViewportUpdated(rect);
+			Viewport = rect.IsEmpty ? Rect.Infinite : rect;
 		}
 
 		partial void ApplyNativeClip(Rect rect);
+
 		private protected virtual void OnViewportUpdated(Rect viewport) { } // Not "Changed" as it might be the same as previous
 
 		internal static object GetDependencyPropertyValueInternal(DependencyObject owner, string dependencyPropertyName)
@@ -605,6 +607,28 @@ namespace Windows.UI.Xaml
 		internal Rect LayoutSlot => ((IUIElement)this).LayoutSlot;
 
 		internal Rect LayoutSlotWithMarginsAndAlignments { get; set; } = default;
+
+		/// <summary>
+		/// Gets the visible rect of the element in its own coordinate space.
+		/// This is equivalent to the "ActualClip" (i.e. Clip property + clipping due to **layout constraints** of the parent),
+		/// **BUT** this is not equivalent to the "EffectiveViewport" since it does not include the **clipping** of the parent,
+		/// nor the scrolling offsets.
+		/// WARNING: This will be Rect.Infinite if the element is not clipped (unlike common clipping algorithm which uses Rect.Empty)
+		/// </summary>
+		internal Rect Viewport
+		{
+			get => _viewport;
+			private set
+			{
+				global::System.Diagnostics.Debug.Assert(!value.IsEmpty, "Empty viewport is invalid. You should use Rect.Infinite if no clipping was applied.");
+
+				if (_viewport != value)
+				{
+					_viewport = value.IsEmpty ? Rect.Infinite : value;
+					OnViewportUpdated(_viewport);
+				}
+			}
+		}
 
 		internal bool NeedsClipToSlot { get; set; }
 

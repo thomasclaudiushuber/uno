@@ -974,7 +974,6 @@ namespace Windows.UI.Xaml.Controls
 
 		private void UpdateSizeChangedSubscription(bool isCleanupRequired = false)
 		{
-			// TODO HERE
 			if (!isCleanupRequired
 				&& Content is IFrameworkElement element)
 			{

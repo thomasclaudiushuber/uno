@@ -98,8 +98,9 @@ namespace Windows.Foundation
 		public double Bottom => Y + Height;
 
 		public bool IsEmpty => Empty.Equals(this);
+		internal bool IsInfinite => Infinite.Equals(this);
 
-		public static implicit operator Rect(string text)
+		public static implicit operator Rect(string? text)
 		{
 			if (text == null)
 			{
@@ -141,7 +142,9 @@ namespace Windows.Foundation
 		public override string ToString() => (string)this;
 
 		internal string ToDebugString()
-			=> IsEmpty ? "--empty--" : FormattableString.Invariant($"{Size.ToDebugString()}@{Location.ToDebugString()}");
+			=> IsEmpty ? "--empty--"
+				: IsInfinite ? "--infinite--"
+				: FormattableString.Invariant($"{Size.ToDebugString()}@{Location.ToDebugString()}");
 
 		/// <summary>
 		/// Provides the size of this rectangle.

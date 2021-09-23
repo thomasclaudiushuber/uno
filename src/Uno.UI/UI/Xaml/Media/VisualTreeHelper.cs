@@ -1,5 +1,5 @@
 ﻿#nullable disable // Not supported by WinUI yet
-// #define TRACE_HIT_TESTING
+#define TRACE_HIT_TESTING
 
 using System;
 using System.Collections.Generic;
@@ -338,14 +338,17 @@ namespace Windows.UI.Xaml.Media
 			var layoutSlot = element.LayoutSlotWithMarginsAndAlignments;
 
 			// The maximum region where the current element and its children might draw themselves
-			// TODO: Get the real clipping rect! For now we assume no clipping.
 			// This is expressed in element coordinate space.
-			var clippingBounds = Rect.Infinite;
+			var visibleBounds = element.Viewport;
 
 			// The region where the current element draws itself.
-			// Be aware that children might be out of this rendering bounds if no clipping defined. TODO: .Intersect(clippingBounds)
+			// Be aware that children might be out of this rendering bounds if no clipping defined.
 			// This is expressed in element coordinate space.
 			var renderingBounds = new Rect(new Point(), layoutSlot.Size);
+			if (!visibleBounds.IsInfinite)
+			{
+				renderingBounds.Intersect(visibleBounds);
+			}
 
 			// First compute the 'position' in the current element coordinate space
 			var posRelToElement = posRelToParent;
@@ -394,11 +397,11 @@ namespace Windows.UI.Xaml.Media
 
 			TRACE($"- layoutSlot: {layoutSlot.ToDebugString()}");
 			TRACE($"- renderBounds (relative to element): {renderingBounds.ToDebugString()}");
-			TRACE($"- clippingBounds (relative to element): {clippingBounds.ToDebugString()}");
+			TRACE($"- visibleBounds (relative to element): {visibleBounds.ToDebugString()}");
 			TRACE($"- position relative to element: {posRelToElement.ToDebugString()} | relative to parent: {posRelToParent.ToDebugString()}");
 
 			// Validate that the pointer is in the bounds of the element
-			if (!clippingBounds.Contains(posRelToElement))
+			if (!visibleBounds.Contains(posRelToElement))
 			{
 				// Even if out of bounds, if the element is stale, we search down for the real stale leaf
 				if (isStale?.Invoke(element) ?? false)
@@ -406,7 +409,7 @@ namespace Windows.UI.Xaml.Media
 					stale = SearchDownForStaleBranch(element, isStale);
 				}
 
-				TRACE($"> NOT FOUND (Out of the **clipped** bounds) | stale branch: {stale?.ToString() ?? "-- none --"}");
+				TRACE($"> NOT FOUND (Out of the **visible** bounds) | stale branch: {stale?.ToString() ?? "-- none --"}");
 				return (default, stale);
 			}
 
@@ -449,7 +452,7 @@ namespace Windows.UI.Xaml.Media
 			}
 
 			// We didn't find any child at the given position, validate that element can be touched (i.e. not HitTestability.Invisible),
-			// and the position is in actual bounds (which might be different than the clipping bounds)
+			// and the position is in actual bounds (which might be different than the visible bounds)
 			if (elementHitTestVisibility == HitTestability.Visible && renderingBounds.Contains(posRelToElement))
 			{
 				TRACE($"> LEAF! ({element.GetDebugName()} is the OriginalSource) | stale branch: {stale?.ToString() ?? "-- none --"}");

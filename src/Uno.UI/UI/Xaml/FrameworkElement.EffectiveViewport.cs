@@ -1,4 +1,4 @@
-﻿//#define TRACE_EFFECTIVE_VIEWPORT
+﻿// #define TRACE_EFFECTIVE_VIEWPORT
 
 using System;
 using System.Collections.Generic;
@@ -41,7 +41,6 @@ namespace Windows.UI.Xaml
 		private int _childrenInterestedInViewportUpdates;
 		private IDisposable _parentViewportUpdatesSubscription;
 		private Rect _parentViewport = Rect.Empty; // WARNING: Stored in parent's coordinates on iOS, use GetParentViewport()
-		private Rect _localViewport = Rect.Empty; // i.e. the applied clipping, Empty if not clipped
 		private Rect _lastEffectiveSlot = new Rect();
 		private Rect _lastEffectiveViewport = new Rect();
 
@@ -178,7 +177,7 @@ namespace Windows.UI.Xaml
 		private protected sealed override void OnViewportUpdated(Rect viewport) // a.k.a. OnLayoutUpdated / OnClippingApplied
 		{
 			// Always keep it up-to-date, so if effective viewport is enable later, we will have a valid value.
-			_localViewport = viewport;
+			//_localViewport = viewport;
 
 			// Even if the viewport didn't changed, the LayoutSlot might have changed!
 			PropagateEffectiveViewportChange();
@@ -187,12 +186,13 @@ namespace Windows.UI.Xaml
 
 		private Rect GetEffectiveViewport(Rect parentViewport, Rect slot)
 		{
-			Rect viewport;
-			if (_localViewport.IsEmpty)
+			Rect localViewport = Viewport;
+			Rect effectiveViewport;
+			if (localViewport.IsInfinite)
 			{
 				// The local element does not clips its children (the common case),
 				// so we only propagate the parent viewport (adjusted in the local coordinate space)
-				viewport = parentViewport;
+				effectiveViewport = parentViewport;
 			}
 			else
 			{
@@ -206,46 +206,47 @@ namespace Windows.UI.Xaml
 
 				double x, y, width, height;
 				var parentWidth = parentViewport.Width.FiniteOrDefault(slot.Width);
-				if (_localViewport.Width < parentWidth)
+				if (localViewport.Width < parentWidth)
 				{
 					// The local element is clipping vertically
-					x = _localViewport.X;
-					width = _localViewport.Width;
+					x = localViewport.X;
+					width = localViewport.Width;
 				}
 				else
 				{
-					x = _localViewport.X + parentViewport.X.FiniteOrDefault(0);
-					width = Math.Min(_localViewport.Width, parentWidth);
+					x = localViewport.X + parentViewport.X.FiniteOrDefault(0);
+					width = Math.Min(localViewport.Width, parentWidth);
 				}
 
 				var parentHeight = parentViewport.Height.FiniteOrDefault(slot.Height);
-				if (_localViewport.Height < parentHeight)
+				if (localViewport.Height < parentHeight)
 				{
 					// The local element is clipping vertically
-					y = _localViewport.Y;
-					height = _localViewport.Height;
+					y = localViewport.Y;
+					height = localViewport.Height;
 				}
 				else
 				{
-					y = _localViewport.Y + parentViewport.Y.FiniteOrDefault(0);
-					height = Math.Min(_localViewport.Height, parentHeight);
+					y = localViewport.Y + parentViewport.Y.FiniteOrDefault(0);
+					height = Math.Min(localViewport.Height, parentHeight);
 				}
 
-				viewport = new Rect(x, y, width, height);
+				effectiveViewport = new Rect(x, y, width, height);
 
 #if !IS_NATIVE_ELEMENT // Only true-UIElement can register as scroller.
+				// TODO: The ScrollOffsets should be part of the (local)Viewport. But this will break the propagation top-down.
 				// This element is also acting as scroller, so we also have to apply the local scroll offsets.
 				// Note: Those offsets should probably be part of the _localViewport (Frame vs. Bounds),
 				//		 but for now we supports only the internal controls that are able to set the internal ScrollOffsets property.
 				if (IsScrollPort)
 				{
-					viewport.X += ScrollOffsets.X;
-					viewport.Y += ScrollOffsets.Y;
+					effectiveViewport.X += ScrollOffsets.X;
+					effectiveViewport.Y += ScrollOffsets.Y;
 				}
 #endif
 			}
 
-			return viewport;
+			return effectiveViewport;
 		}
 
 		private Rect GetParentViewport()
@@ -300,7 +301,7 @@ namespace Windows.UI.Xaml
 			TRACE_EFFECTIVE_VIEWPORT($"viewport: {viewport.ToDebugString()} (updated: {isViewportUpdate}) "
 				+ $"| slot: {slot.ToDebugString()} (updated: {isSlotUpdate}) "
 				+ $"| isInitial: {isInitial} "
-				+ $"| local: {_localViewport.ToDebugString()} "
+				+ $"| local: {Viewport.ToDebugString()} "
 				+ $"| parent: {parentViewport.ToDebugString()} "
 #if IS_NATIVE_ELEMENT
 				+ $"| scroll: --none--(native) "
