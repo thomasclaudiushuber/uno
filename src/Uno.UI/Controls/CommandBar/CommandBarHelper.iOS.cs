@@ -4,6 +4,7 @@ using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using UIKit;
+using CommandBar = Uno.UI.Controls.CommandBar;
 
 namespace Uno.UI.Controls
 {

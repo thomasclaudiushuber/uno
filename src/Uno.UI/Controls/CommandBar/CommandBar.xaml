@@ -7,8 +7,8 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:uBehaviors="using:Uno.UI.Behaviors"
-	xmlns:primitives="using:Microsoft.UI.Xaml.Controls.Primitives"
-    xmlns:local="using:Windows.UI.Xaml.Controls"
+	xmlns:primitives="using:Windows.UI.Xaml.Controls.Primitives"
+    xmlns:u="using:Uno.UI.Controls"
 	mc:Ignorable="d">
 
 	<ResourceDictionary.ThemeDictionaries>
@@ -203,7 +203,7 @@
 
 	<!-- Default style for Windows.UI.Xaml.Controls.CommandBar -->
 	<Style x:Key="XamlDefaultCommandBar"
-					TargetType="CommandBar">
+					TargetType="u:CommandBar">
 		<Setter Property="Background"
 				Value="{ThemeResource SystemControlBackgroundChromeMediumBrush}" />
 		<Setter Property="Foreground"
@@ -222,7 +222,7 @@
 				Value="Compact" />
 		<Setter Property="Template">
 			<Setter.Value>
-				<ControlTemplate TargetType="CommandBar">
+				<ControlTemplate TargetType="u:CommandBar">
 					<Grid x:Name="LayoutRoot"
 						  Background="{TemplateBinding Background}">
 						<VisualStateManager.VisualStateGroups>
@@ -1437,22 +1437,22 @@
 															X="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHorizontalOffset}" />
 									</Grid.RenderTransform>
 
-									<CommandBarOverflowPresenter x:Name="SecondaryItemsControl"
+									<u:CommandBarOverflowPresenter x:Name="SecondaryItemsControl"
 																 Style="{TemplateBinding CommandBarOverflowPresenterStyle}"
 																 IsEnabled="False"
 																 IsTabStop="False">
-										<CommandBarOverflowPresenter.RenderTransform>
+										<u:CommandBarOverflowPresenter.RenderTransform>
 											<TranslateTransform x:Name="OverflowContentTransform" />
-										</CommandBarOverflowPresenter.RenderTransform>
-										<CommandBarOverflowPresenter.ItemContainerStyle>
+										</u:CommandBarOverflowPresenter.RenderTransform>
+										<u:CommandBarOverflowPresenter.ItemContainerStyle>
 											<Style TargetType="FrameworkElement">
 												<Setter Property="HorizontalAlignment"
 														Value="Stretch" />
 												<Setter Property="Width"
 														Value="NaN" />
 											</Style>
-										</CommandBarOverflowPresenter.ItemContainerStyle>
-									</CommandBarOverflowPresenter>
+										</u:CommandBarOverflowPresenter.ItemContainerStyle>
+									</u:CommandBarOverflowPresenter>
 								</Grid>
 							</Popup>
 							<Rectangle x:Name="HighContrastBorder"
@@ -1473,10 +1473,10 @@
 
 	<!-- Backward compatibility naming -->
 	<Style x:Key="XamlCommandBar"
-				   TargetType="CommandBar"
+				   TargetType="u:CommandBar"
 		   BasedOn="{StaticResource XamlDefaultCommandBar}" />
 
-	<Style TargetType="CommandBar"
+	<Style TargetType="u:CommandBar"
 		   BasedOn="{StaticResource XamlDefaultCommandBar}" />
 
 </ResourceDictionary>

@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:UITests.Windows_UI_Xaml_Controls.CommandBar.Background"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:u="using:Uno.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:xamarin="http://uno.ui/xamarin"
     mc:Ignorable="d xamarin"
@@ -16,7 +17,7 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<CommandBar Content="Page 1"
+		<u:CommandBar Content="Page 1"
 		            x:Name="Page1CommandBar" />
 
 		<Button x:Name="NavigateToPage2Button"

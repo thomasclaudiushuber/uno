@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using ObjCRuntime;
+using CommandBar = Uno.UI.Controls.CommandBar;
 
 namespace Uno.UI.Controls
 {
@@ -764,7 +765,7 @@ namespace Uno.UI.Controls
 
 			internal CommandBar GetCommandBar()
 			{
-				return Page.TopAppBar as CommandBar ?? Page.FindFirstChild<CommandBar>();
+				return Page.FindFirstChild<CommandBar>();
 			}
 
 			public override string ToString()

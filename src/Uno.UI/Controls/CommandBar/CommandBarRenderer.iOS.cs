@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Uno.Extensions;
 using Windows.UI;
+using CommandBar = Uno.UI.Controls.CommandBar;
 
 namespace Uno.UI.Controls
 {

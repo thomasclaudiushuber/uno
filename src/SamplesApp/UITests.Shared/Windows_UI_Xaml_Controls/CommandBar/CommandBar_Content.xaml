@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Uno.UI.Samples.Content.UITests.CommandBar"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:u="using:Uno.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:toolkit="using:Uno.UI.Toolkit"
 	xmlns:ios="http://nventive.com/ios"
@@ -68,7 +69,7 @@
 		<StackPanel>
 
 			<TextBlock Text="Empty" />
-			<CommandBar Background="Orange">
+			<u:CommandBar Background="Orange">
 				<toolkit:CommandBarExtensions.NavigationCommand>
 					<AppBarButton Command="{Binding Command}"
 								  Label="Label">
@@ -77,18 +78,18 @@
 						</AppBarButton.Icon>
 					</AppBarButton>
 				</toolkit:CommandBarExtensions.NavigationCommand>
-				<CommandBar.PrimaryCommands>
+				<u:CommandBar.PrimaryCommands>
 					<AppBarButton Content="Button" />
 					<AppBarButton>
 						<AppBarButton.Icon>
 							<BitmapIcon UriSource="ms-appx:///Assets/Icons/search.png" />
 						</AppBarButton.Icon>
 					</AppBarButton>
-				</CommandBar.PrimaryCommands>
-			</CommandBar>
+				</u:CommandBar.PrimaryCommands>
+			</u:CommandBar>
 
 			<TextBlock Text="String" />
-			<CommandBar Content="String"
+			<u:CommandBar Content="String"
 						Background="LightGreen"
 						Foreground="DarkGray">
 				<toolkit:CommandBarExtensions.NavigationCommand>
@@ -99,21 +100,21 @@
 						</AppBarButton.Icon>
 					</AppBarButton>
 				</toolkit:CommandBarExtensions.NavigationCommand>
-				<CommandBar.PrimaryCommands>
+				<u:CommandBar.PrimaryCommands>
 					<AppBarButton Content="Button" />
 					<AppBarButton>
 						<AppBarButton.Icon>
 							<BitmapIcon UriSource="ms-appx:///Assets/Icons/search.png" />
 						</AppBarButton.Icon>
 					</AppBarButton>
-				</CommandBar.PrimaryCommands>
-			</CommandBar>
+				</u:CommandBar.PrimaryCommands>
+			</u:CommandBar>
 
 			<TextBlock Text="Border Stretch" />
-			<CommandBar Foreground="Black">
-				<CommandBar.Content>
+			<u:CommandBar Foreground="Black">
+				<u:CommandBar.Content>
 					<Border Background="Red" />
-				</CommandBar.Content>
+				</u:CommandBar.Content>
 				<toolkit:CommandBarExtensions.NavigationCommand>
 					<AppBarButton Command="{Binding Command}"
 												Label="Label">
@@ -122,29 +123,29 @@
 						</AppBarButton.Icon>
 					</AppBarButton>
 				</toolkit:CommandBarExtensions.NavigationCommand>
-				<CommandBar.PrimaryCommands>
+				<u:CommandBar.PrimaryCommands>
 					<AppBarButton>
 						<AppBarButton.Icon>
 							<BitmapIcon UriSource="ms-appx:///Assets/Icons/search.png" />
 						</AppBarButton.Icon>
 					</AppBarButton>
-				</CommandBar.PrimaryCommands>
-				<CommandBar.SecondaryCommands>
+				</u:CommandBar.PrimaryCommands>
+				<u:CommandBar.SecondaryCommands>
 					<AppBarButton Content="SecondaryCommand"
 								  Foreground="Green"/>
-				</CommandBar.SecondaryCommands>
-			</CommandBar>
+				</u:CommandBar.SecondaryCommands>
+			</u:CommandBar>
 
 			<TextBlock Text="Border Center" />
-			<CommandBar Background="LightGray"
+			<u:CommandBar Background="LightGray"
 						Foreground="Red">
-				<CommandBar.Content>
+				<u:CommandBar.Content>
 					<Border Background="Red"
 									Height="20"
 									Width="20"
 									HorizontalAlignment="Center"
 									VerticalAlignment="Center" />
-				</CommandBar.Content>
+				</u:CommandBar.Content>
 				<toolkit:CommandBarExtensions.NavigationCommand>
 					<AppBarButton Command="{Binding Command}"
 								Label="Label">
@@ -153,19 +154,19 @@
 						</AppBarButton.Icon>
 					</AppBarButton>
 				</toolkit:CommandBarExtensions.NavigationCommand>
-				<CommandBar.PrimaryCommands>
+				<u:CommandBar.PrimaryCommands>
 					<AppBarButton Content="Button" />
 					<AppBarButton>
 						<AppBarButton.Icon>
 							<BitmapIcon UriSource="ms-appx:///Assets/Icons/search.png" />
 						</AppBarButton.Icon>
 					</AppBarButton>
-				</CommandBar.PrimaryCommands>
-			</CommandBar>
+				</u:CommandBar.PrimaryCommands>
+			</u:CommandBar>
 
 			<TextBlock Text="Title" />
-			<CommandBar Foreground="DarkBlue">
-				<CommandBar.Content>
+			<u:CommandBar Foreground="DarkBlue">
+				<u:CommandBar.Content>
 					<TextBlock Text="TextBlock"
 										 ios:FontSize="17"
 										 ios:FontWeight="Medium"
@@ -173,7 +174,7 @@
 										 android:FontSize="20"
 										 android:HorizontalAlignment="Left"
 										 VerticalAlignment="Center" />
-				</CommandBar.Content>
+				</u:CommandBar.Content>
 				<toolkit:CommandBarExtensions.NavigationCommand>
 					<AppBarButton Command="{Binding Command}"
 												Label="Label">
@@ -182,7 +183,7 @@
 						</AppBarButton.Icon>
 					</AppBarButton>
 				</toolkit:CommandBarExtensions.NavigationCommand>
-				<CommandBar.SecondaryCommands>
+				<u:CommandBar.SecondaryCommands>
 					<AppBarButton Label="SecondaryCommand1"
 								  Foreground="DarkBlue"/>
 					<AppBarButton Foreground="DarkBlue">
@@ -190,12 +191,12 @@
 							<BitmapIcon UriSource="ms-appx:///Assets/Icons/search.png" />
 						</AppBarButton.Icon>
 					</AppBarButton>
-				</CommandBar.SecondaryCommands>
-			</CommandBar>
+				</u:CommandBar.SecondaryCommands>
+			</u:CommandBar>
 
 			<TextBlock Text="Subtitle" />
-			<CommandBar Foreground="Brown">
-				<CommandBar.Content>
+			<u:CommandBar Foreground="Brown">
+				<u:CommandBar.Content>
 					<StackPanel ios:HorizontalAlignment="Center"
 											android:HorizontalAlignment="Left"
 											VerticalAlignment="Center">
@@ -210,7 +211,7 @@
 											 android:FontSize="14"
 											 android:HorizontalAlignment="Left" />
 					</StackPanel>
-				</CommandBar.Content>
+				</u:CommandBar.Content>
 				<toolkit:CommandBarExtensions.NavigationCommand>
 					<AppBarButton Command="{Binding Command}"
 												Label="Label">
@@ -219,22 +220,22 @@
 						</AppBarButton.Icon>
 					</AppBarButton>
 				</toolkit:CommandBarExtensions.NavigationCommand>
-				<CommandBar.PrimaryCommands>
+				<u:CommandBar.PrimaryCommands>
 					<AppBarButton Content="Button" />
 					<AppBarButton>
 						<AppBarButton.Icon>
 							<BitmapIcon UriSource="ms-appx:///Assets/Icons/search.png" />
 						</AppBarButton.Icon>
 					</AppBarButton>
-				</CommandBar.PrimaryCommands>
-			</CommandBar>
+				</u:CommandBar.PrimaryCommands>
+			</u:CommandBar>
 
 			<TextBlock Text="TextBox" />
-			<CommandBar Background="Purple">
-				<CommandBar.Content>
+			<u:CommandBar Background="Purple">
+				<u:CommandBar.Content>
 					<TextBox PlaceholderText="TextBox"
 									 Style="{StaticResource XamlDefaultTextBox}"/>
-				</CommandBar.Content>
+				</u:CommandBar.Content>
 				<toolkit:CommandBarExtensions.NavigationCommand>
 					<AppBarButton Command="{Binding Command}"
 								  Label="Label">
@@ -243,22 +244,22 @@
 						</AppBarButton.Icon>
 					</AppBarButton>
 				</toolkit:CommandBarExtensions.NavigationCommand>
-				<CommandBar.PrimaryCommands>
+				<u:CommandBar.PrimaryCommands>
 					<AppBarButton>
 						<AppBarButton.Icon>
 							<BitmapIcon UriSource="ms-appx:///Assets/Icons/search.png" />
 						</AppBarButton.Icon>
 					</AppBarButton>
 					<AppBarButton Content="Button" />
-				</CommandBar.PrimaryCommands>
-			</CommandBar>
+				</u:CommandBar.PrimaryCommands>
+			</u:CommandBar>
 
 			<TextBlock Text="Foreground" />
-			<CommandBar Foreground="Red"
+			<u:CommandBar Foreground="Red"
 						Background="Yellow">
-				<CommandBar.Content>
+				<u:CommandBar.Content>
 					<TextBlock Text="TextBlock" />
-				</CommandBar.Content>
+				</u:CommandBar.Content>
 				<toolkit:CommandBarExtensions.NavigationCommand>
 					<AppBarButton Command="{Binding Command}"
 												Label="Label">
@@ -267,22 +268,22 @@
 						</AppBarButton.Icon>
 					</AppBarButton>
 				</toolkit:CommandBarExtensions.NavigationCommand>
-				<CommandBar.PrimaryCommands>
+				<u:CommandBar.PrimaryCommands>
 					<AppBarButton Content="Button" />
 					<AppBarButton Label="Icon">
 						<AppBarButton.Icon>
 							<BitmapIcon UriSource="ms-appx:///Assets/Icons/search.png" />
 						</AppBarButton.Icon>
 					</AppBarButton>
-				</CommandBar.PrimaryCommands>
-			</CommandBar>
+				</u:CommandBar.PrimaryCommands>
+			</u:CommandBar>
 
 			<TextBlock Text="DataContext" />
-			<CommandBar DataContext="DataContext"
+			<u:CommandBar DataContext="DataContext"
 						Foreground="Black">
-				<CommandBar.Content>
+				<u:CommandBar.Content>
 					<TextBlock Text="{Binding}" />
-				</CommandBar.Content>
+				</u:CommandBar.Content>
 				<toolkit:CommandBarExtensions.NavigationCommand>
 					<AppBarButton Command="{Binding Command}"
 												Label="Label">
@@ -291,25 +292,25 @@
 						</AppBarButton.Icon>
 					</AppBarButton>
 				</toolkit:CommandBarExtensions.NavigationCommand>
-				<CommandBar.PrimaryCommands>
+				<u:CommandBar.PrimaryCommands>
 					<AppBarButton Content="Button" />
 					<AppBarButton>
 						<AppBarButton.Icon>
 							<BitmapIcon UriSource="ms-appx:///Assets/Icons/search.png" />
 						</AppBarButton.Icon>
 					</AppBarButton>
-				</CommandBar.PrimaryCommands>
-			</CommandBar>
+				</u:CommandBar.PrimaryCommands>
+			</u:CommandBar>
 
 			<TextBlock Text="Complex control whose content is dynamic and forces resizes"/>
-			<CommandBar Foreground="Blue">
-				<CommandBar.Content>
+			<u:CommandBar Foreground="Blue">
+				<u:CommandBar.Content>
 					<local:CommandBarTitle MainTitle="{Binding [DynamicTitle]}"
 																 SubTitle1="{Binding [DynamicSubTitle1]}"
 																 SubTitle2="{Binding [DynamicSubTitle2]}"
 																 Style="{StaticResource DefaultCommandBarTitle}"/>
-				</CommandBar.Content>
-			</CommandBar>
+				</u:CommandBar.Content>
+			</u:CommandBar>
 		</StackPanel>
 	</ScrollViewer>
 

@@ -7,10 +7,12 @@ using System.Text;
 using Uno.UI;
 using Windows.Foundation;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml;
 using Uno.UI.Controls;
 using Uno.UI.Extensions;
 
-namespace Windows.UI.Xaml.Controls
+namespace Uno.UI.Controls
 {
 	public partial class AppBar : ContentControl
 #if HAS_NATIVE_COMMANDBAR
@@ -25,12 +27,12 @@ namespace Windows.UI.Xaml.Controls
 
 		public AppBar()
 		{
-			TemplateSettings = new AppBarTemplateSettings(this);
+			TemplateSettings = new AppBarTemplateSettings();
 
 			SizeChanged += (s, e) => UpdateTemplateSettings();
 		}
 
-#region IsSticky
+		#region IsSticky
 
 		public bool IsSticky
 		{
@@ -46,9 +48,9 @@ namespace Windows.UI.Xaml.Controls
 				new FrameworkPropertyMetadata(default(bool))
 			);
 
-#endregion
+		#endregion
 
-#region IsOpen
+		#region IsOpen
 
 		public bool IsOpen
 		{
@@ -64,9 +66,9 @@ namespace Windows.UI.Xaml.Controls
 			new FrameworkPropertyMetadata(default(bool))
 		);
 
-#endregion
+		#endregion
 
-#region ClosedDisplayMode
+		#region ClosedDisplayMode
 
 		public AppBarClosedDisplayMode ClosedDisplayMode
 		{
@@ -82,9 +84,9 @@ namespace Windows.UI.Xaml.Controls
 				new FrameworkPropertyMetadata(AppBarClosedDisplayMode.Compact)
 			);
 
-#endregion
+		#endregion
 
-#region LightDismissOverlayMode
+		#region LightDismissOverlayMode
 
 		public LightDismissOverlayMode LightDismissOverlayMode
 		{
@@ -100,7 +102,7 @@ namespace Windows.UI.Xaml.Controls
 				new FrameworkPropertyMetadata(default(LightDismissOverlayMode))
 			);
 
-#endregion
+		#endregion
 
 		public AppBarTemplateSettings TemplateSettings { get; }
 

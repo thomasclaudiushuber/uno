@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:toolkit="using:Uno.UI.Toolkit"
+		xmlns:u="using:Uno.UI.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -69,15 +70,15 @@
 		</CommandBar>
 		
 		<!-- Exampl with toolkit	-->
-		<CommandBar Foreground="Red"
+		<u:CommandBar Foreground="Red"
 						Background="Pink">
-			<CommandBar.Content>
+			<u:CommandBar.Content>
 				<TextBlock Text="Ceci est une longue phrase pour tester la commandBar sur Android et iOS"
 									 TextTrimming="CharacterEllipsis"
 									 VerticalAlignment="Center"
 									 FontSize="18"
 									 FontWeight="Bold"/>
-			</CommandBar.Content>
+			</u:CommandBar.Content>
 			<toolkit:CommandBarExtensions.NavigationCommand>
 				<AppBarButton Label="Label">
 					<AppBarButton.Icon>
@@ -85,15 +86,15 @@
 					</AppBarButton.Icon>
 				</AppBarButton>
 			</toolkit:CommandBarExtensions.NavigationCommand>
-			<CommandBar.PrimaryCommands>
+			<u:CommandBar.PrimaryCommands>
 				<AppBarButton Content="Button" />
 				<AppBarButton Label="Icon">
 					<AppBarButton.Icon>
 						<BitmapIcon UriSource="ms-appx:///Assets/Icons/search.png" />
 					</AppBarButton.Icon>
 				</AppBarButton>
-			</CommandBar.PrimaryCommands>
-		</CommandBar>
+			</u:CommandBar.PrimaryCommands>
+		</u:CommandBar>
 		
 	</StackPanel>
 </Page>

@@ -22,6 +22,7 @@ using Android.Content;
 using AndroidX.AppCompat.Widget;
 using AndroidX.Core.Graphics.Drawable;
 using Java.IO;
+using CommandBar = Uno.UI.Controls.CommandBar;
 
 namespace Uno.UI.Controls
 {

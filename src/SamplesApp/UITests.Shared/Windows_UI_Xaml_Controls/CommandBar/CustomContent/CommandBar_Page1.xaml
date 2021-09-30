@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:u="using:Uno.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:xamarin="http://uno.ui/xamarin"
     mc:Ignorable="d xamarin"
@@ -15,8 +16,8 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<CommandBar x:Name="Page1CommandBar">
-			<CommandBar.Content>
+		<u:CommandBar x:Name="Page1CommandBar">
+			<u:CommandBar.Content>
 				<Border VerticalAlignment="Center"
 						Height="44"
 						HorizontalAlignment="Center">
@@ -25,8 +26,8 @@
 							   TextWrapping="NoWrap"
 							   Foreground="Blue" />
 					</Border>
-			</CommandBar.Content>
-		</CommandBar>
+			</u:CommandBar.Content>
+		</u:CommandBar>
 
 		<StackPanel Grid.Row="1"
 		            Spacing="10"

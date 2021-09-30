@@ -5,6 +5,7 @@
     xmlns:local="using:UITests.Windows_UI_Xaml_Controls.CommandBar.BackButtonImage"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:u="using:Uno.UI.Controls"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -15,7 +16,7 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-	<CommandBar Content="Page 2"
+	<u:CommandBar Content="Page 2"
 				x:Name="Page2CommandBar" />
 
 	<StackPanel Grid.Row="1"

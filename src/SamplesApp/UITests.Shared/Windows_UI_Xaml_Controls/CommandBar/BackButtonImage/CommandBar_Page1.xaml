@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:xamarin="http://uno.ui/xamarin"
+	xmlns:u="using:Uno.UI.Controls"
     mc:Ignorable="d xamarin"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -16,7 +17,7 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-	<CommandBar Content="Page1"
+	<u:CommandBar Content="Page1"
 				x:Name="Page1ommandBar" />
 
 		<StackPanel Grid.Row="1"

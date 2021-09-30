@@ -4,6 +4,7 @@
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	  xmlns:toolkit="using:Uno.UI.Toolkit"
+	  xmlns:u="using:Uno.UI.Controls"
 	  mc:Ignorable="d">
 
 	<Grid Background="Orange">
@@ -13,7 +14,7 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<CommandBar Content="NavigationCommand"
+		<u:CommandBar Content="NavigationCommand"
 					Foreground="DarkGray">
 			<toolkit:CommandBarExtensions.NavigationCommand>
 				<AppBarButton Label="MyLabel"
@@ -23,7 +24,7 @@
 					</AppBarButton.Icon>
 				</AppBarButton>
 			</toolkit:CommandBarExtensions.NavigationCommand>
-		</CommandBar>
+		</u:CommandBar>
 
 		<TextBlock Text="Here the CommandBar is visible and has a navigation command. The back gesture SHOULD NOT work."
 				   HorizontalAlignment="Center"

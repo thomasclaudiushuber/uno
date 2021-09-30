@@ -15,6 +15,7 @@ using Windows.UI.ViewManagement;
 using Uno.Disposables;
 using Windows.Graphics.Display;
 using UIKit;
+using CommandBar = Uno.UI.Controls.CommandBar;
 
 namespace Uno.UI.Controls
 {

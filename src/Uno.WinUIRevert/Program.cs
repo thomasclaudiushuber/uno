@@ -17,6 +17,8 @@ namespace UnoWinUIRevert
 			DeleteFolder(Path.Combine(basePath, "src", "Uno.UWP", "Generated"));
 			DeleteFolder(Path.Combine(basePath, "src", "Uno.UI", "UI", "Composition"));
 			DeleteFolder(Path.Combine(basePath, "src", "Uno.UI", "UI", "Xaml", "Controls", "ProgressBar")); // ProgressBar in WinUI is a replacement of the UWP's version.
+			DeleteFolder(Path.Combine(basePath, "src", "Uno.UI", "UI", "Xaml", "Controls", "CommandBar")); // CommandBar in WinUI is a replacement of the UWP's version.
+			DeleteFolder(Path.Combine(basePath, "src", "Uno.UI", "UI", "Xaml", "Controls", "AppBar")); // AppBar in WinUI is a replacement of the UWP's version.
 
 			var compositionPath = Path.Combine(basePath, @"src", "Uno.UWP", "UI", "Composition");
 			if (Directory.Exists(compositionPath))

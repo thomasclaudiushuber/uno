@@ -10,6 +10,7 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using System.IO;
 using Uno.Collections;
+using CommandBar = Uno.UI.Controls.CommandBar;
 
 namespace Uno.UI.Controls
 {

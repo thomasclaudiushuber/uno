@@ -8,16 +8,20 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Uno.Logging;
 using Uno.UI.Controls;
 using Uno.Disposables;
+using Popup = Windows.UI.Xaml.Controls.Primitives.Popup;
+using AppBar = Uno.UI.Controls.AppBar;
 #if __IOS__
 using UIKit;
 #elif __ANDROID__
 using Uno.UI;
 #endif
 
-namespace Windows.UI.Xaml.Controls
+namespace Uno.UI.Controls
 {
 	[ContentProperty(Name = nameof(PrimaryCommands))]
 	[TemplatePart(Name = MoreButton, Type = typeof(Button))]
@@ -48,7 +52,7 @@ namespace Windows.UI.Xaml.Controls
 			PrimaryCommands.VectorChanged += (s, e) => UpdateCommands();
 			SecondaryCommands.VectorChanged += (s, e) => UpdateCommands();
 
-			CommandBarTemplateSettings = new CommandBarTemplateSettings(this);
+			CommandBarTemplateSettings = new CommandBarTemplateSettings();
 
 			Loaded += (s, e) => RegisterEvents();
 			Unloaded += (s, e) => UnregisterEvents();
@@ -62,7 +66,7 @@ namespace Windows.UI.Xaml.Controls
 				var hasSecondaryItems = SecondaryCommands.Any();
 				if (hasSecondaryItems)
 				{
-					if (_overflowPopup is {} popup)
+					if (_overflowPopup is { } popup)
 					{
 						popup.IsOpen = true;
 					}
@@ -114,14 +118,14 @@ namespace Windows.UI.Xaml.Controls
 
 			var disposables = new CompositeDisposable(2);
 
-			if (_moreButton is {} moreButton)
+			if (_moreButton is { } moreButton)
 			{
 				moreButton.Click += OnMoreButtonClicked;
 
 				disposables.Add(() => moreButton.Click -= OnMoreButtonClicked);
 			}
 
-			if (_overflowPopup is {} overflowPopup)
+			if (_overflowPopup is { } overflowPopup)
 			{
 				overflowPopup.Closed += OnOverflowPopupClosed;
 

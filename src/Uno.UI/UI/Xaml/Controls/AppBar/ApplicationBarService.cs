@@ -7,7 +7,7 @@
 using Uno.UI.Xaml.Input;
 using Windows.UI.Xaml;
 
-namespace Uno.UI.Xaml.Controls
+namespace Windows.UI.Xaml.Controls
 {
 	//TODO Uno: This is just a stub of the MUX class.
 	internal class ApplicationBarService

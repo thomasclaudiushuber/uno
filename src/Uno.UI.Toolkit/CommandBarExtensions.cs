@@ -4,6 +4,7 @@ using System.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using CommandBar = Uno.UI.Controls.CommandBar;
 
 namespace Uno.UI.Toolkit
 {

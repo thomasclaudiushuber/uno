@@ -401,7 +401,7 @@
 		BasedOn="{StaticResource XamlDefaultPivot}" />
 
 	<ios:Style x:Key="NativeDefaultCommandBar"
-			   TargetType="CommandBar">
+			   TargetType="u:CommandBar">
 		<Setter Property="Background"
 				Value="{x:Null}" />
 		<Setter Property="Foreground"
@@ -412,7 +412,7 @@
 				Value="Top" />
 		<Setter Property="Template">
 			<Setter.Value>
-				<ControlTemplate TargetType="CommandBar">
+				<ControlTemplate TargetType="u:CommandBar">
 					<!-- We use BorderBrush instead of Background to ensure that semi-transparent background of Grid and NativeCommandBarPresenter don't add up -->
 					<Border BorderBrush="{TemplateBinding Background}"
 							BorderThickness="{TemplateBinding Padding}">
@@ -425,7 +425,7 @@
 	</ios:Style>
 
 	<android:Style x:Key="NativeDefaultCommandBar"
-				   TargetType="CommandBar">
+				   TargetType="u:CommandBar">
 		<Setter Property="Background"
 				Value="{x:Null}" />
 		<Setter Property="Foreground"
@@ -436,7 +436,7 @@
 				Value="Top" />
 		<Setter Property="Template">
 			<Setter.Value>
-				<ControlTemplate TargetType="CommandBar">
+				<ControlTemplate TargetType="u:CommandBar">
 					<NativeCommandBarPresenter />
 				</ControlTemplate>
 			</Setter.Value>
@@ -445,21 +445,21 @@
 
 	<wasm:Style
 		x:Key="NativeDefaultCommandBar"
-		TargetType="CommandBar"
+		TargetType="u:CommandBar"
 		BasedOn="{StaticResource XamlDefaultCommandBar}" />
 
 	<skia:Style
 		x:Key="NativeDefaultCommandBar"
-		TargetType="CommandBar"
+		TargetType="u:CommandBar"
 		BasedOn="{StaticResource XamlDefaultCommandBar}" />
 
 	<macos:Style
 		x:Key="NativeDefaultCommandBar"
-		TargetType="CommandBar"
+		TargetType="u:CommandBar"
 		BasedOn="{StaticResource XamlCommandBar}" />
 
 	<xamarin:Style
-		TargetType="CommandBar"
+		TargetType="u:CommandBar"
 		xamarin:IsNativeStyle="True"
 		BasedOn="{StaticResource NativeDefaultCommandBar}" />
 

@@ -19,6 +19,8 @@ using Uno.Extensions.Specialized;
 using System.Threading;
 using Windows.UI.Core;
 using Uno.Disposables;
+using CommandBar = Uno.UI.Controls.CommandBar;
+using AppBar = Uno.UI.Controls.AppBar;
 
 namespace Uno.UI.Controls
 {
@@ -76,7 +78,7 @@ namespace Uno.UI.Controls
 				: Visibility.Collapsed;
 
 			var page = _frame?.CurrentEntry?.Instance;
-			var commandBar = page?.TopAppBar ?? page?.FindFirstChild<CommandBar>();
+			var commandBar = page?.FindFirstChild<CommandBar>();
 			commandBar?.SetValue(BackButtonVisibilityProperty, backButtonVisibility);
 		}
 

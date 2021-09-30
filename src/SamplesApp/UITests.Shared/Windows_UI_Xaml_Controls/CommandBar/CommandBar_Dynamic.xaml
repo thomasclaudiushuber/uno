@@ -4,6 +4,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:toolkit="using:Uno.UI.Toolkit"
+	xmlns:u="using:Uno.UI.Controls"
 	xmlns:valueconverters="using:UITests.ValueConverters"
 	mc:Ignorable="d"
 	d:DesignHeight="300"
@@ -37,19 +38,19 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 		<Border Grid.Row="1" BorderBrush="Yellow" BorderThickness="4" x:Name="TheBorder"/>
-		<CommandBar Content="{Binding Text, ElementName=Content2}"
+		<u:CommandBar Content="{Binding Text, ElementName=Content2}"
 					Visibility="{Binding Text, ElementName=cbVisibility}"
 					Opacity="{Binding Value, ElementName=sliderOpacity}"
 					Style="{Binding IsChecked, ElementName=native, Converter={StaticResource nativeTemplateConverter}}"
 					x:Name="TheCommandBar">
-			<CommandBar.Foreground>
+			<u:CommandBar.Foreground>
 				<SolidColorBrush Color="{Binding SelectedItem, ElementName=ForegroundColor}"
 						 Opacity="{Binding Value, ElementName=ForegroundOpacity}" />
-			</CommandBar.Foreground>
-			<CommandBar.Background>
+			</u:CommandBar.Foreground>
+			<u:CommandBar.Background>
 				<SolidColorBrush Color="{Binding SelectedItem, ElementName=BackgroundColor}"
 						 Opacity="{Binding Value, ElementName=BackgroundOpacity}" />
-			</CommandBar.Background>
+			</u:CommandBar.Background>
 			<toolkit:CommandBarExtensions.NavigationCommand>
 				<AppBarButton Label="{Binding Text, ElementName=CommandLabel}"
 					  Visibility="{Binding SelectedItem, ElementName=CommandVisibility}"
@@ -64,7 +65,7 @@
 					</AppBarButton.Icon>
 				</AppBarButton>
 			</toolkit:CommandBarExtensions.NavigationCommand>
-			<CommandBar.PrimaryCommands>
+			<u:CommandBar.PrimaryCommands>
 				<AppBarButton Content="{Binding Text, ElementName=Content2}"
 					  Label="{Binding Text, ElementName=CommandLabel}"
 					  Visibility="{Binding SelectedItem, ElementName=CommandVisibility}"
@@ -88,8 +89,8 @@
 						<BitmapIcon UriSource="{Binding Text, ElementName=CommandIcon}" />
 					</AppBarButton.Icon>
 				</AppBarButton>
-			</CommandBar.PrimaryCommands>
-			<CommandBar.SecondaryCommands>
+			</u:CommandBar.PrimaryCommands>
+			<u:CommandBar.SecondaryCommands>
 				<AppBarButton Content="{Binding Text, ElementName=Content2}"
 					  Label="{Binding Text, ElementName=CommandLabel}"
 					  Visibility="{Binding SelectedItem, ElementName=CommandVisibility}"
@@ -103,8 +104,8 @@
 						<BitmapIcon UriSource="{Binding Text, ElementName=CommandIcon}" />
 					</AppBarButton.Icon>
 				</AppBarButton>
-			</CommandBar.SecondaryCommands>
-		</CommandBar>
+			</u:CommandBar.SecondaryCommands>
+		</u:CommandBar>
 		<ScrollViewer Grid.Row="1">
 			<StackPanel Spacing="8" Margin="30,0">
 				<CheckBox x:Name="native" Content="NativeCommandBar" IsChecked="True" />
