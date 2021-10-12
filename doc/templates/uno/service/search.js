@@ -155,7 +155,7 @@ function enableSearch() {
                 worker.postMessage({q: query});
             }
 
-        }).then(r => r.resolve());
+        });
     }
 
     // Highlight the searching keywords
