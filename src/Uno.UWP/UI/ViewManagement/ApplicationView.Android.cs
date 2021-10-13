@@ -8,11 +8,24 @@ using Uno.Logging;
 using Uno.UI;
 using Windows.Foundation;
 using Windows.UI.Core;
+using Uno.UI.ViewManagement;
 
 namespace Windows.UI.ViewManagement
 {
 	partial class ApplicationView
 	{
+		partial void InitializePartial()
+		{
+			if (ContextHelper.Current is IBaseActivityEvents activityEvents)
+			{
+				BaseActivityEvents = activityEvents;
+			}
+
+			TryInitializeSpanningRectsExtension();
+		}
+
+		internal IBaseActivityEvents BaseActivityEvents { get; private set; }
+
 		public bool IsScreenCaptureEnabled
 		{
 			get
