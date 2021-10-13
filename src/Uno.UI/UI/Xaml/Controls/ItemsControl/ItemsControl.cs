@@ -1050,8 +1050,6 @@ namespace Windows.UI.Xaml.Controls
 		{
 			var isOwnContainer = ReferenceEquals(element, item);
 
-			var styleFromItemsControl = ItemContainerStyle ?? ItemContainerStyleSelector?.SelectStyle(item, element);
-
 			void SetContent(UIElement container, DependencyProperty contentProperty)
 			{
 				var displayMemberPath = DisplayMemberPath;
@@ -1072,15 +1070,6 @@ namespace Windows.UI.Xaml.Controls
 			//Prepare ContentPresenter
 			if (element is ContentPresenter containerAsContentPresenter)
 			{
-				if (styleFromItemsControl != null)
-				{
-					containerAsContentPresenter.Style = styleFromItemsControl;
-				}
-				else
-				{
-					containerAsContentPresenter.Style = null;
-				}
-
 				containerAsContentPresenter.ContentTemplate = ItemTemplate;
 				containerAsContentPresenter.ContentTemplateSelector = ItemTemplateSelector;
 
@@ -1091,11 +1080,6 @@ namespace Windows.UI.Xaml.Controls
 			}
 			else if (element is ContentControl containerAsContentControl)
 			{
-				if (styleFromItemsControl != null)
-				{
-					containerAsContentControl.Style = styleFromItemsControl;
-				}
-
 				if (!containerAsContentControl.IsContainerFromTemplateRoot)
 				{
 					containerAsContentControl.ContentTemplate = ItemTemplate;
@@ -1117,6 +1101,8 @@ namespace Windows.UI.Xaml.Controls
 					}
 				}
 			}
+
+			ApplyItemContainerStyle(element, item);
 		}
 
 		/// <summary>
@@ -1506,6 +1492,20 @@ namespace Windows.UI.Xaml.Controls
 				if (child is SelectorItem selectorItem)
 				{
 					selectorItem.UpdateVisualState(useTransitions);
+				}
+			}
+		}
+
+		private void ApplyItemContainerStyle(DependencyObject element, object item)
+		{
+			var containerAsFE = element as FrameworkElement;
+			if (containerAsFE != null)
+			{
+				var localStyleValue = element.ReadLocalValue(FrameworkElement.StyleProperty);
+
+				if (localStyleValue == DependencyProperty.UnsetValue)
+				{
+					containerAsFE.Style = ItemContainerStyle ?? ItemContainerStyleSelector?.SelectStyle(item, element);
 				}
 			}
 		}
