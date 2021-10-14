@@ -5,6 +5,17 @@
 	<UmbrellaMSBuildTasksImported>true</UmbrellaMSBuildTasksImported>
   </PropertyGroup>
 
+	<Choose>
+		<When Condition="'$(BuildingInsideUnoSourceGenerator)'=='true'">
+			<PropertyGroup>
+				<AndroidUseManagedDesignTimeResourceGenerator>False</AndroidUseManagedDesignTimeResourceGenerator>
+			</PropertyGroup>
+			<ItemGroup>
+				<Compile Condition="'$(XamarinProjectType)'=='android'" Include="$(_AndroidResourceDesignerFile)" />
+			</ItemGroup>
+		</When>
+	</Choose>
+	
   <ItemGroup>
 	<UnoSourceGeneratorBeforeTarget Condition="'$(XamarinProjectType)'=='android'" Include="UpdateAndroidAssets" />
   </ItemGroup>
@@ -22,8 +33,7 @@
   -->
   <Target Name="UnoResourcesGeneration"
 			  BeforeTargets="_GetLibraryImports;PrepareForBuild;_CheckForContent"
-			  DependsOnTargets="ResolveProjectReferences"
-			  Condition="'$(DesignTimeBuild)' != 'true' and '$(BuildingInsideUnoSourceGenerator)' == ''">
+			  DependsOnTargets="ResolveProjectReferences">
 
     <CheckForDevenv Condition="'$(SolutionFileName)'=='Uno.UI.sln' and '$(MSBuildRuntimeType)'!='Core'" />
 
@@ -53,7 +63,7 @@
   <Target Name="UnoAssetsGeneration"
 			  BeforeTargets="_GetLibraryImports;PrepareForBuild;_CheckForContent"
 			  DependsOnTargets="ResolveProjectReferences"
-			  Condition="'$(DesignTimeBuild)' != 'true' and '$(BuildingInsideUnoSourceGenerator)' == '' and ('$(XamarinProjectType)'!='' or '$(UnoForceProcessPRIResource)'!='')">
+			  Condition="('$(XamarinProjectType)'!='' or '$(UnoForceProcessPRIResource)'!='')">
 	<!-- Assets -->
 	<PropertyGroup>
 	  <UseHighDPIResources Condition="'$(UseHighDPIResources)'==''">True</UseHighDPIResources>
