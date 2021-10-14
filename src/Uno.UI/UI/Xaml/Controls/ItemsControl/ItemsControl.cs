@@ -1498,14 +1498,16 @@ namespace Windows.UI.Xaml.Controls
 
 		private void ApplyItemContainerStyle(DependencyObject element, object item)
 		{
-			var containerAsFE = element as FrameworkElement;
-			if (containerAsFE != null)
+			if (element is FrameworkElement containerAsFE)
 			{
 				var localStyleValue = element.ReadLocalValue(FrameworkElement.StyleProperty);
-
 				if (localStyleValue == DependencyProperty.UnsetValue)
 				{
-					containerAsFE.Style = ItemContainerStyle ?? ItemContainerStyleSelector?.SelectStyle(item, element);
+					var styleFromItemsControl = ItemContainerStyle ?? ItemContainerStyleSelector?.SelectStyle(item, element);
+					if (styleFromItemsControl != null)
+					{
+						containerAsFE.Style = styleFromItemsControl;
+					}
 				}
 			}
 		}
